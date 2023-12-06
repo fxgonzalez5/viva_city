@@ -1,0 +1,1 @@
+export 'package:viva_city/presentation/providers/slides_provider.dart';

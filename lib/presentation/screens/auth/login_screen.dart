@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:viva_city/presentation/widgets/custom_text_form_field.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:viva_city/presentation/screens/screens.dart';
+import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class LoginScreen extends StatelessWidget {
+  static const String name = 'login_screen';
+
   const LoginScreen({super.key});
 
   @override
@@ -86,10 +91,10 @@ class SocialAccounts extends StatelessWidget {
                 children: [
                   Image(
                       image: AssetImage(
-                    "assets/images/googleLogin.png",
+                    "assets/images/logo_google.png",
                   )),
                   Text(
-                    "Continuar \n con Google",
+                    "Continuar\ncon Google",
                     style: TextStyle(
                       color: Color(0xffFFFFFF),
                       fontSize: 10,
@@ -106,10 +111,10 @@ class SocialAccounts extends StatelessWidget {
                 children: [
                   Image(
                       image: AssetImage(
-                    "assets/images/facebookLogin.png",
+                    "assets/images/logo_facebook.png",
                   )),
                   Text(
-                    "Continuar \n con Facebook",
+                    "Continuar\ncon Facebook",
                     style: TextStyle(
                       color: Color(0xffFFFFFF),
                       fontSize: 10,
@@ -152,9 +157,7 @@ class ButtonIngresarAndText extends StatelessWidget {
           SizedBox(
             height: 40,
             child: TextButton(
-                onPressed: () {
-                  //TODO:Navegar pantalla de registro 
-                },
+                onPressed: () => context.pushNamed(SigupScreen.name),
                 child: const Text(
                   "Registrarse",
                   style: TextStyle(
@@ -255,7 +258,7 @@ class Background extends StatelessWidget {
           ]),
         )),
         Positioned(
-            top: -10, left: -55, child: Image.asset("assets/images/LogoV.png")),
+            top: -10, left: -55, child: Image.asset("assets/images/logo_viva_city.png")),
       ],
     );
   }

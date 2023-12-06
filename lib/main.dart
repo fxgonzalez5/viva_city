@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:viva_city/presentation/screens/login/login_screen.dart';
-import 'package:viva_city/presentation/screens/register/register_screen.dart';
+import 'package:provider/provider.dart';
+
+import 'package:viva_city/config/router/app_router.dart';
+import 'package:viva_city/config/theme/app_theme.dart';
+import 'package:viva_city/presentation/providers/providers.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,12 +12,18 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return  const MaterialApp(
-      debugShowCheckedModeBanner: false,  
-      home: RegisterScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => SlidesProvider()),
+      ],
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: 'Viva City',
+        routerConfig: appRouter,
+        theme: AppTheme().getTheme(context),
+      ),
     );
   }
 }

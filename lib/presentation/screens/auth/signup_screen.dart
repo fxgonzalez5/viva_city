@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:viva_city/presentation/widgets/custom_text_form_field.dart';
+import 'package:go_router/go_router.dart';
 
-class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+import 'package:viva_city/presentation/widgets/widgets.dart';
+
+class SigupScreen extends StatelessWidget {
+  static const String name = 'signup_screen';
+
+  const SigupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(alignment: Alignment.center, children: [
-        const Background(),
+        const _Background(),
         SingleChildScrollView(
           child: SizedBox(
             height: size.height,
@@ -20,11 +24,11 @@ class RegisterScreen extends StatelessWidget {
                 const Spacer(
                   flex: 8,
                 ),
-                const TextInit(),
+                const _TextInit(),
                 const SizedBox(
                   height: 20,
                 ),
-                const BoxLogin(),
+                const _BoxLogin(),
                 ElevatedButton(
                     onPressed: () {
                       //TODO: Validar ingreso con credenciales del usuario
@@ -40,7 +44,7 @@ class RegisterScreen extends StatelessWidget {
                       "CREAR CUENTA",
                       style: TextStyle(fontSize: 16, color: Color(0xffFFFFFF)),
                     )),
-                const ButtonIngresarAndText(),
+                const _ButtonIngresarAndText(),
                 const Spacer(
                   flex: 1,
                 )
@@ -55,8 +59,8 @@ class RegisterScreen extends StatelessWidget {
 
 
 
-class ButtonIngresarAndText extends StatelessWidget {
-  const ButtonIngresarAndText({
+class _ButtonIngresarAndText extends StatelessWidget {
+  const _ButtonIngresarAndText({
     super.key,
   });
 
@@ -77,11 +81,11 @@ class ButtonIngresarAndText extends StatelessWidget {
                   color: Color(0xffFFFFFF)
                   ),
                 ),
-                TextButton(onPressed: (){
-                  //TODO: Redireccion al Login
-                }, child: const Text("Ingresa",
-                style: TextStyle(
-                  color: Color(0xffE5A000)
+                TextButton(
+                  onPressed: () => context.pop(),
+                  child: const Text("Ingresa",
+                    style: TextStyle(
+                    color: Color(0xffE5A000)
                 ),)),
               ],
             ),
@@ -99,8 +103,8 @@ class ButtonIngresarAndText extends StatelessWidget {
   }
 }
 
-class BoxLogin extends StatelessWidget {
-  const BoxLogin({
+class _BoxLogin extends StatelessWidget {
+  const _BoxLogin({
     super.key,
   });
 
@@ -155,8 +159,8 @@ class BoxLogin extends StatelessWidget {
   }
 }
 
-class TextInit extends StatelessWidget {
-  const TextInit({
+class _TextInit extends StatelessWidget {
+  const _TextInit({
     super.key,
   });
 
@@ -184,8 +188,8 @@ class TextInit extends StatelessWidget {
   }
 }
 
-class Background extends StatelessWidget {
-  const Background({
+class _Background extends StatelessWidget {
+  const _Background({
     super.key,
   });
 
@@ -205,7 +209,7 @@ class Background extends StatelessWidget {
           ]),
         )),
         Positioned(
-            top: -10, left: -55, child: Image.asset("assets/images/LogoV.png")),
+            top: -10, left: -55, child: Image.asset("assets/images/logo_viva_city.png")),
       ],
     );
   }
