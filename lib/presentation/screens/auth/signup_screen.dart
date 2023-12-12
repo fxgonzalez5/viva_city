@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:viva_city/config/theme/responsive.dart';
+import 'package:viva_city/presentation/screens/screens.dart';
+import 'package:viva_city/presentation/widgets/custom_elevated_button.dart';
 
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
@@ -10,14 +13,14 @@ class SigupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final responsive = Responsive(context);
     return Scaffold(
       body: Stack(alignment: Alignment.center, children: [
-        const _Background(),
+        const AuthBackground(),
         SingleChildScrollView(
           child: SizedBox(
-            height: size.height,
-            width: size.width * 0.75,
+            height: responsive.hp(100),
+            width: responsive.wp(75),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -29,21 +32,12 @@ class SigupScreen extends StatelessWidget {
                   height: 20,
                 ),
                 const _BoxLogin(),
-                ElevatedButton(
-                    onPressed: () {
-                      //TODO: Validar ingreso con credenciales del usuario
-                    },
-                    style: ButtonStyle(
-                        padding: const MaterialStatePropertyAll(
-                            EdgeInsets.symmetric(vertical: 13, horizontal: 40)),
-                        backgroundColor:
-                            const MaterialStatePropertyAll(Color(0xffE5A000)),
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(7)))),
-                    child: const Text(
-                      "CREAR CUENTA",
-                      style: TextStyle(fontSize: 16, color: Color(0xffFFFFFF)),
-                    )),
+                CustomElevatedButton(padding: EdgeInsets.symmetric(vertical: responsive.hp(1.2), horizontal: responsive.wp(8.5), 
+                ), style: TextStyle(fontSize: responsive.ip(1.5)), onPressed: () {
+                  context.pushReplacementNamed(PresentationScreen.name);
+                  //TODO: Validar ingreso con credenciales del usuario
+                },
+                text: "CREAR CUENTA",),
                 const _ButtonIngresarAndText(),
                 const Spacer(
                   flex: 1,
@@ -166,9 +160,10 @@ class _TextInit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
+    final responsive = Responsive(context);
+    return SizedBox(
       width: double.infinity,
-      height: 85,
+      height: responsive.ip(10) ,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -184,33 +179,6 @@ class _TextInit extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _Background extends StatelessWidget {
-  const _Background({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: Image.asset("assets/images/fondo.png", fit: BoxFit.cover),
-        ),
-        Container(
-            decoration: BoxDecoration(
-          gradient: LinearGradient(begin: Alignment.topCenter, colors: [
-            const Color(0xff3D238E).withOpacity(0.85),
-            const Color(0xff3D23CC).withOpacity(0.85),
-          ]),
-        )),
-        Positioned(
-            top: -10, left: -55, child: Image.asset("assets/images/logo_viva_city.png")),
-      ],
     );
   }
 }

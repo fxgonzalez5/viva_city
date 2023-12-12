@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:viva_city/config/theme/responsive.dart';
 
 import 'package:viva_city/presentation/screens/screens.dart';
+import 'package:viva_city/presentation/widgets/custom_elevated_button.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -11,47 +13,32 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final responsive = Responsive(context);
     return Scaffold(
       body: Stack(alignment: Alignment.center, children: [
-        const Background(),
+        const AuthBackground(),
         SingleChildScrollView(
           child: SizedBox(
-            height: size.height,
-            width: size.width * 0.75,
+            width: responsive.wp(75),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Spacer(
-                  flex: 3,
+                SizedBox(
+                  height: responsive.hp(25),
                 ),
-                const TextInit(),
-                const SizedBox(
-                  height: 50,
+                const _TextInit(),
+                 SizedBox(
+                  height: responsive.ip(4.4),
                 ),
-                const BoxLogin(),
-                ElevatedButton(
-                    onPressed: () {
-                      //TODO: Validar ingreso con credenciales del usuario
-                    },
-                    style: ButtonStyle(
-                        padding: const MaterialStatePropertyAll(
-                            EdgeInsets.symmetric(vertical: 13, horizontal: 40)),
-                        backgroundColor:
-                            const MaterialStatePropertyAll(Color(0xffE5A000)),
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(7)))),
-                    child: const Text(
-                      "INGRESAR",
-                      style: TextStyle(fontSize: 16, color: Color(0xffFFFFFF)),
-                    )),
-                const ButtonIngresarAndText(),
-                SocialAccounts(
-                  size: size,
+                const _BoxLogin(),
+                CustomElevatedButton(padding: EdgeInsets.symmetric(vertical: responsive.hp(1.2), horizontal: responsive.wp(8.5), 
+                ), onPressed: () {
+                  context.pushReplacementNamed(PresentationScreen.name);
+                  //TODO: Validar ingreso con credenciales del usuario
+                } , style: TextStyle(fontSize: responsive.ip(1.5)),
+                text: "INGRESAR",),
+                const _ButtonIngresarAndText(),
+                const _SocialAccounts(
                 ),
-                const Spacer(
-                  flex: 1,
-                )
               ],
             ),
           ),
@@ -61,63 +48,63 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class SocialAccounts extends StatelessWidget {
-  final Size size;
-  const SocialAccounts({
+class _SocialAccounts extends StatelessWidget {
+  const _SocialAccounts({
     super.key,
-    required this.size,
+   
   });
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
     return Column(
       children: [
-        const Text(
+         Text(
           "O avanza con tus cuentas sociales",
-          style: TextStyle(color: Color(0xffFFFFFF), fontSize: 12),
+          style: TextStyle(color: const Color(0xffFFFFFF), fontSize: responsive.ip(1.1)),
         ),
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-          margin: const EdgeInsets.only(top: 10),
+          padding:  EdgeInsets.symmetric(vertical: responsive.ip(0.95), horizontal: responsive.ip(2.3)),
+          margin:  EdgeInsets.only(top: responsive.ip(0.95)),
           decoration: BoxDecoration(
               color: const Color(0xffFFFFFF).withOpacity(0.20),
               borderRadius: const BorderRadius.all(Radius.circular(10))),
-          child: const Row(
+          child:  Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image(
+                  const Image(
                       image: AssetImage(
                     "assets/images/logo_google.png",
                   )),
                   Text(
                     "Continuar\ncon Google",
                     style: TextStyle(
-                      color: Color(0xffFFFFFF),
-                      fontSize: 10,
+                      color: const Color(0xffFFFFFF),
+                      fontSize: responsive.ip(0.9),
                     ),
                     textAlign: TextAlign.center,
                   )
                 ],
               ),
               SizedBox(
-                width: 30,
+                width: responsive.ip(2.5),
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image(
+                  const Image(
                       image: AssetImage(
                     "assets/images/logo_facebook.png",
                   )),
                   Text(
                     "Continuar\ncon Facebook",
                     style: TextStyle(
-                      color: Color(0xffFFFFFF),
-                      fontSize: 10,
+                      color: const Color(0xffFFFFFF),
+                      fontSize: responsive.ip(0.9),
                     ),
                     textAlign: TextAlign.center,
                   )
@@ -131,38 +118,39 @@ class SocialAccounts extends StatelessWidget {
   }
 }
 
-class ButtonIngresarAndText extends StatelessWidget {
-  const ButtonIngresarAndText({
+class _ButtonIngresarAndText extends StatelessWidget {
+  const _ButtonIngresarAndText({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
           SizedBox(
-            height: 40,
+            height: responsive.ip(3.5),
             child: TextButton(
               onPressed: () {
                 //TODO:Navegar pantalla de recuperacion de contraseña
               },
-              child: const Text(
+              child:  Text(
                 "Olvidaste tu contraseña?",
-                style: TextStyle(color: Color(0xffFFFFFF), fontSize: 14),
+                style: TextStyle(color: const Color(0xffFFFFFF), fontSize: responsive.ip(1.3)),
               ),
             ),
           ),
           SizedBox(
-            height: 40,
+            height: responsive.ip(3.5),
             child: TextButton(
                 onPressed: () => context.pushNamed(SigupScreen.name),
-                child: const Text(
+                child:  Text(
                   "Registrarse",
                   style: TextStyle(
-                    color: Color(0xffFFFFFF),
-                    fontSize: 14,
+                    color: const Color(0xffFFFFFF),
+                    fontSize: responsive.ip(1.3),
                   ),
                 )),
           ),
@@ -172,25 +160,26 @@ class ButtonIngresarAndText extends StatelessWidget {
   }
 }
 
-class BoxLogin extends StatelessWidget {
-  const BoxLogin({
+class _BoxLogin extends StatelessWidget {
+  const _BoxLogin({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return const Form(
+    final responsive = Responsive(context);
+    return  Form(
       // TODO: crear la llave del formulario
       child: Column(
       children: [
-        CustomTextFormField(
+        const CustomTextFormField(
             title: "Correo electrónico/número teléfono",
             label: "Ingresa tu correo electrónico o número",
             prefixIcon: Icons.email),
         SizedBox(
-          height: 30,
+          height: responsive.ip(2.5),
         ),
-        CustomTextFormField(
+        const CustomTextFormField(
           title: "Contraseña",
           label: "Ingresa tu contraseña",
           prefixIcon: Icons.lock,
@@ -198,67 +187,39 @@ class BoxLogin extends StatelessWidget {
           noVisibility: true,
         ),
         SizedBox(
-          height: 50,
+          height: responsive.ip(4.5),
         )
       ],
     ));
   }
 }
 
-class TextInit extends StatelessWidget {
-  const TextInit({
+class _TextInit extends StatelessWidget {
+  const _TextInit({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-      width: double.infinity,
-      height: 85,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "INGRESAR",
-            style: TextStyle(color: Color(0xffFFFFFF), fontSize: 24),
-          ),
-          Text(
-            "¡Disfruta tu ciudad! Bienvenido...",
-            style: TextStyle(color: Color(0xffE5A000), fontSize: 22),
-          ),
-          Text(
-            "Ingresa tus datos para continuar",
-            style: TextStyle(color: Color(0xffFFFFFF)),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Background extends StatelessWidget {
-  const Background({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
+    final responsive = Responsive(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: double.infinity,
-          child: Image.asset("assets/images/fondo.png", fit: BoxFit.cover),
+        Text(
+          "INGRESAR",
+          style: TextStyle(color: const Color(0xffFFFFFF), fontSize: responsive.ip(2.2)),
         ),
-        Container(
-            decoration: BoxDecoration(
-          gradient: LinearGradient(begin: Alignment.topCenter, colors: [
-            const Color(0xff3D238E).withOpacity(0.85),
-            const Color(0xff3D23CC).withOpacity(0.85),
-          ]),
-        )),
-        Positioned(
-            top: -10, left: -55, child: Image.asset("assets/images/logo_viva_city.png")),
+        Text(
+          "¡Disfruta tu ciudad! Bienvenido...",
+          style: TextStyle(color: const Color(0xffE5A000), fontSize: responsive.ip(2.0)),
+        ),
+        SizedBox(
+          height: responsive.hp(0.5),
+        ),
+        const Text(
+          "Ingresa tus datos para continuar",
+          style: TextStyle(color: Color(0xffFFFFFF)),
+        ),
       ],
     );
   }
