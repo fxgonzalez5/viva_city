@@ -6,19 +6,17 @@ class CustomElevatedButton extends StatelessWidget {
   final  EdgeInsets padding;
   final  String text;
   final  TextStyle? style; 
+  final  VoidCallback? onPressed;
 
   const CustomElevatedButton({
-    super.key, required this.padding, required this.text, this.style,
+    super.key, required this.padding, required this.text, this.style, required this.onPressed,
   });
 
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: () {
-          context.pushReplacementNamed(PresentationScreen.name);
-          //TODO: Validar ingreso con credenciales del usuario
-        },
+        onPressed: onPressed,
         style: ButtonStyle(
             padding: MaterialStatePropertyAll(
               padding
