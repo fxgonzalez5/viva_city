@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:viva_city/config/theme/responsive.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String title;
@@ -6,49 +7,50 @@ class CustomTextFormField extends StatelessWidget {
   final IconData prefixIcon;
   final IconData? suffixIcon;
   final bool noVisibility; 
-  const CustomTextFormField({super.key, required this.title, required this.label, required this.prefixIcon, this.suffixIcon, this.noVisibility=false});
+  final EdgeInsets? padding;
+  final String? Function(String?)? validator;
+  final Function(String)? onChanged;
+  
+  const CustomTextFormField({
+    super.key,
+    required this.title,
+    required this.label,
+    required this.prefixIcon,
+    this.suffixIcon,
+    this.noVisibility = false,
+    this.padding,
+    this.validator,
+    this.onChanged
+  });
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
+
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-          style: const TextStyle(
-            color: Color(0xffFFFFFF),
-            fontSize: 16,
-            ),
-          ),
-          const SizedBox(height: 5,),
-          
+          Text(title, style: TextStyle(color: Colors.white, fontSize: responsive.ip(1.6))),
+          SizedBox(height: responsive.hp(1),),
           TextFormField(
-            style: const TextStyle(color: Colors.white ),
+            style: const TextStyle(color: Colors.white),
             obscureText: noVisibility,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: const Color(0xffFFFFFF).withOpacity(0.20),
-              focusedBorder:  UnderlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide(
-                  color: const Color(0xffFFFFFF).withOpacity(0.20),
-                  )
-              ),
-              enabledBorder:  const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide.none
-              ),                    
-              labelText: label, 
-                labelStyle: const TextStyle(
-                  color: Color(0xffFFFFFF),
-                  fontSize: 12,
-                ),
-                prefixIcon: Icon(prefixIcon, color: Colors.white,),
-                suffixIcon: IconButton(onPressed:(){
+            decoration: InputDecoration(    
+              contentPadding: padding,
+              prefixIcon: Icon(prefixIcon),
+              hintText: label,
+              suffixIcon: suffixIcon != null
+              ? IconButton(
+                icon: Icon(suffixIcon),
+                onPressed:(){
                   //TODO: Permitir que se vea la contraseña
                   print("click");
                 },
-                icon: Icon(suffixIcon), color: Colors.white,)
+              )
+              : null
             ),
+            validator: validator,
+            onChanged: onChanged,
           ),
         ],
       );

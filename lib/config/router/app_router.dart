@@ -20,14 +20,26 @@ final appRouter = GoRouter(
 
     GoRoute(
       path: '/signup',
-      name: SigupScreen.name,
-      builder: (context, state) => const SigupScreen(),
+      name: SignupScreen.name,
+      builder: (context, state) => const SignupScreen(),
+    ),
+
+    GoRoute(
+      path: '/sliding',
+      name: SlidingScreen.name,
+      builder: (context, state) => const SlidingScreen(),
     ),
 
     GoRoute(
       path: '/presentation',
       name: PresentationScreen.name,
       builder: (context, state) => const PresentationScreen(),
+    ),
+    
+    GoRoute(
+      path: '/navegation',
+      name: NavegationScreen.name,
+      builder: (context, state) => const NavegationScreen(),
     ),
     
     GoRoute(

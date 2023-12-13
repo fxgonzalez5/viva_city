@@ -17,6 +17,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SlidesProvider()),
+        ChangeNotifierProvider(create: (_) => SlidingProvider()),
+        ChangeNotifierProvider(create: (_) => HomeProvider()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

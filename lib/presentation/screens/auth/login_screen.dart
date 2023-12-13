@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:viva_city/config/theme/responsive.dart';
 
+import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/screens/screens.dart';
-import 'package:viva_city/presentation/widgets/custom_elevated_button.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -14,102 +13,70 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
+
     return Scaffold(
-      body: Stack(alignment: Alignment.center, children: [
-        const AuthBackground(),
-        SingleChildScrollView(
-          child: SizedBox(
-            width: responsive.wp(75),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: responsive.hp(25),
-                ),
-                const _TextInit(),
-                 SizedBox(
-                  height: responsive.ip(4.4),
-                ),
-                const _BoxLogin(),
-                CustomElevatedButton(padding: EdgeInsets.symmetric(vertical: responsive.hp(1.2), horizontal: responsive.wp(8.5), 
-                ), onPressed: () {
-                  context.pushReplacementNamed(PresentationScreen.name);
-                  //TODO: Validar ingreso con credenciales del usuario
-                } , style: TextStyle(fontSize: responsive.ip(1.5)),
-                text: "INGRESAR",),
-                const _ButtonIngresarAndText(),
-                const _SocialAccounts(
-                ),
-              ],
+      body: Stack(
+        children: [
+          const AuthBackground(),
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsive.wp(12.5)),
+              child: Column(
+                children: [
+                  SizedBox(height: responsive.hp(28)),
+                  const _HeaderText(),
+                  SizedBox(height: responsive.hp(5)),
+                  const _LoginForm(),
+                  const _NavigationTextButtons(),
+                  Text(
+                    'O avanza con tus cuentas sociales',
+                    style: TextStyle(color: Colors.white, fontSize: responsive.ip(1.2))
+                  ),
+                  const _AuthBox(),
+                  SizedBox(height: responsive.hp(6.5)),
+                ],
+              ),
             ),
-          ),
-        )
+          )
       ]),
     );
   }
 }
 
-class _SocialAccounts extends StatelessWidget {
-  const _SocialAccounts({
-    super.key,
-   
-  });
+class _AuthBox extends StatelessWidget {
+  const _AuthBox();
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
+
     return Column(
       children: [
-         Text(
-          "O avanza con tus cuentas sociales",
-          style: TextStyle(color: const Color(0xffFFFFFF), fontSize: responsive.ip(1.1)),
-        ),
         Container(
-          padding:  EdgeInsets.symmetric(vertical: responsive.ip(0.95), horizontal: responsive.ip(2.3)),
-          margin:  EdgeInsets.only(top: responsive.ip(0.95)),
+          margin: EdgeInsets.only(top: responsive.hp(1)),
+          padding: EdgeInsets.symmetric(vertical: responsive.hp(0.75), horizontal: responsive.wp(6)),
           decoration: BoxDecoration(
-              color: const Color(0xffFFFFFF).withOpacity(0.20),
-              borderRadius: const BorderRadius.all(Radius.circular(10))),
-          child:  Row(
+            color: Colors.white24,
+            borderRadius: BorderRadius.circular(responsive.ip(0.75)),
+          ),
+          child: Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Image(
-                      image: AssetImage(
-                    "assets/images/logo_google.png",
-                  )),
-                  Text(
-                    "Continuar\ncon Google",
-                    style: TextStyle(
-                      color: const Color(0xffFFFFFF),
-                      fontSize: responsive.ip(0.9),
-                    ),
-                    textAlign: TextAlign.center,
-                  )
-                ],
+              _AuthButton(
+                assetName: 'assets/images/logo_google.png',
+                label: 'Continuar\ncon Google',
+                onTap: () {
+                  // TODO: Implementar la autentificación con Google
+                },
               ),
-              SizedBox(
-                width: responsive.ip(2.5),
+              SizedBox(width: responsive.wp(8)),
+              _AuthButton(
+                assetName: 'assets/images/logo_facebook.png',
+                label: 'Continuar\ncon Facebook',
+                onTap: () {
+                  // TODO: Implementar la autentificación con Facebook
+                },
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Image(
-                      image: AssetImage(
-                    "assets/images/logo_facebook.png",
-                  )),
-                  Text(
-                    "Continuar\ncon Facebook",
-                    style: TextStyle(
-                      color: const Color(0xffFFFFFF),
-                      fontSize: responsive.ip(0.9),
-                    ),
-                    textAlign: TextAlign.center,
-                  )
-                ],
-              )
             ],
           ),
         ),
@@ -118,41 +85,62 @@ class _SocialAccounts extends StatelessWidget {
   }
 }
 
-class _ButtonIngresarAndText extends StatelessWidget {
-  const _ButtonIngresarAndText({
-    super.key,
+class _AuthButton extends StatelessWidget {
+  final String assetName;
+  final String label;
+  final VoidCallback? onTap;
+  
+  const _AuthButton({
+    required this.assetName,
+    required this.label,
+    this.onTap
   });
+
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
+
+    return GestureDetector(
+      onTap: onTap,
       child: Column(
         children: [
-          SizedBox(
-            height: responsive.ip(3.5),
-            child: TextButton(
-              onPressed: () {
-                //TODO:Navegar pantalla de recuperacion de contraseña
-              },
-              child:  Text(
-                "Olvidaste tu contraseña?",
-                style: TextStyle(color: const Color(0xffFFFFFF), fontSize: responsive.ip(1.3)),
-              ),
+          Image.asset(assetName),
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: responsive.ip(1),
             ),
+            textAlign: TextAlign.center,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _NavigationTextButtons extends StatelessWidget {
+  const _NavigationTextButtons();
+
+  @override
+  Widget build(BuildContext context) {
+    final responsive = Responsive(context);
+    
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+      child: Column(
+        children: [
+          CustomTextButton(
+            text: 'Olvidaste tu contraseña?',
+            onPressed: () {
+              // TODO: Navegar pantalla de recuperacion de contraseña
+            }
           ),
-          SizedBox(
-            height: responsive.ip(3.5),
-            child: TextButton(
-                onPressed: () => context.pushNamed(SigupScreen.name),
-                child:  Text(
-                  "Registrarse",
-                  style: TextStyle(
-                    color: const Color(0xffFFFFFF),
-                    fontSize: responsive.ip(1.3),
-                  ),
-                )),
+          
+          CustomTextButton(
+            text: 'Registrarse',
+            onPressed: () => context.pushReplacementNamed(SignupScreen.name)
           ),
         ],
       ),
@@ -160,67 +148,87 @@ class _ButtonIngresarAndText extends StatelessWidget {
   }
 }
 
-class _BoxLogin extends StatelessWidget {
-  const _BoxLogin({
-    super.key,
-  });
+class _LoginForm extends StatelessWidget {
+  const _LoginForm();
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
-    return  Form(
-      // TODO: crear la llave del formulario
+    
+    return Form(
+      // key: ,
       child: Column(
-      children: [
-        const CustomTextFormField(
+        children: [
+          CustomTextFormField(
             title: "Correo electrónico/número teléfono",
             label: "Ingresa tu correo electrónico o número",
-            prefixIcon: Icons.email),
-        SizedBox(
-          height: responsive.ip(2.5),
-        ),
-        const CustomTextFormField(
-          title: "Contraseña",
-          label: "Ingresa tu contraseña",
-          prefixIcon: Icons.lock,
-          suffixIcon: Icons.remove_red_eye,
-          noVisibility: true,
-        ),
-        SizedBox(
-          height: responsive.ip(4.5),
-        )
-      ],
-    ));
+            prefixIcon: Icons.email,
+            // onChanged: (value) => loginForm.email = value,
+            validator: (value) {
+              String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+              RegExp regExp = RegExp(pattern);
+
+              return regExp.hasMatch(value ?? '')
+                  ? null
+                  : 'El valor ingresado no luce como un correo';
+            },
+          ),
+          SizedBox(height: responsive.hp(2.5)),
+          CustomTextFormField(
+            title: "Contraseña",
+            label: "Ingresa tu contraseña",
+            prefixIcon: Icons.lock,
+            suffixIcon: Icons.remove_red_eye,
+            noVisibility: true,
+            // onChanged: (value) => loginForm.password = value,
+            validator: (value) {
+              return (value != null && value.length >= 8)
+                  ? null
+                  : 'Mínimo 8 caracteres';
+            },
+          ),
+          SizedBox(height: responsive.hp(5)),
+          CustomElevatedButton(
+            text: "INGRESAR",
+            onPressed: () {
+              context.pushReplacementNamed(SlidingScreen.name);
+              //TODO: Validar ingreso con credenciales del usuario
+            },
+          ),
+        ],
+      ));
   }
 }
 
-class _TextInit extends StatelessWidget {
-  const _TextInit({
-    super.key,
-  });
+class _HeaderText extends StatelessWidget {
+  const _HeaderText();
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "INGRESAR",
-          style: TextStyle(color: const Color(0xffFFFFFF), fontSize: responsive.ip(2.2)),
-        ),
-        Text(
-          "¡Disfruta tu ciudad! Bienvenido...",
-          style: TextStyle(color: const Color(0xffE5A000), fontSize: responsive.ip(2.0)),
-        ),
-        SizedBox(
-          height: responsive.hp(0.5),
-        ),
-        const Text(
-          "Ingresa tus datos para continuar",
-          style: TextStyle(color: Color(0xffFFFFFF)),
-        ),
-      ],
+    final colors = Theme.of(context).colorScheme;
+    final texts = Theme.of(context).textTheme;
+
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "INGRESAR",
+            style: texts.headlineSmall,
+          ),
+          Text(
+            "¡Disfruta tu ciudad! Bienvenido...",
+            style: TextStyle(color: colors.secondary, fontSize: responsive.ip(2)),
+          ),
+          SizedBox(height: responsive.hp(0.5)),
+          const Text(
+            "Ingresa tus datos para continuar",
+            style: TextStyle(color: Colors.white),
+          ),
+        ],
+      ),
     );
   }
 }

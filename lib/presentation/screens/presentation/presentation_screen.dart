@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
 import 'package:viva_city/config/theme/responsive.dart';
-import 'package:viva_city/presentation/screens/auth/signup_screen.dart';
-import 'package:viva_city/presentation/screens/screens.dart';
+import 'package:viva_city/presentation/providers/providers.dart';
 
 class PresentationScreen extends StatelessWidget {
   static const String name = 'presentation_screen';
@@ -11,6 +11,9 @@ class PresentationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
+    final colors = Theme.of(context).colorScheme;
+    final slidingProvider = context.read<SlidingProvider>();
+
     return Scaffold(
       body: Stack(
       alignment: Alignment.center,
@@ -24,11 +27,10 @@ class PresentationScreen extends StatelessWidget {
               height: responsive.hp(79.5),
             ),
             IconButton(
-              onPressed: (){},
-              //TODO: animacion.
               icon:  Icon(Icons.expand_less, size: responsive.ip(7)),
-              color: const Color(0xffE5A000),)
-              
+              color: colors.secondary,
+              onPressed: () => slidingProvider.currentPage = 1,
+            )  
           ],
         )
       ],
