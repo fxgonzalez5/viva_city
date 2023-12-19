@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:viva_city/config/menu/navigation_items.dart';
 import 'package:viva_city/config/theme/responsive.dart';
+import 'package:viva_city/domain/services/services.dart';
 import 'package:viva_city/presentation/screens/screens.dart';
 
 
@@ -12,9 +14,21 @@ class NavegationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final firebaseAuthService = FirebaseAuthService();
+
     return Scaffold(
       extendBody: true,
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await firebaseAuthService.logout();
+              context.pushReplacementNamed(LoginScreen.name); 
+            },
+          )
+        ],
+      ),
       drawer: const Drawer(),
       body: PageView(
         scrollDirection: Axis.vertical,

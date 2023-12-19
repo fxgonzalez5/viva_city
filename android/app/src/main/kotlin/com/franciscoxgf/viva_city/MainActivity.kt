@@ -1,4 +1,4 @@
-package com.example.viva_city
+package com.franciscoxgf.viva_city
 
 import io.flutter.embedding.android.FlutterActivity
 

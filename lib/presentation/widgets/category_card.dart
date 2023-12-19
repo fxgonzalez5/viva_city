@@ -28,12 +28,10 @@ class CategoryCard extends StatelessWidget {
         alignment: Alignment.topRight,
         child: Container(
           padding: EdgeInsets.all(responsive.wp(1.5)),
-          child: Text( category, style: TextStyle(
-            color: Colors.white
-          ),),
           width: responsive.wp(30),
           height: responsive.hp(3.5),
           color: colors.primary,
+          child: Text(category, style: const TextStyle(color: Colors.white)),
         ),
       ),
     );

@@ -6,10 +6,13 @@ class CustomTextFormField extends StatelessWidget {
   final String label;
   final IconData prefixIcon;
   final IconData? suffixIcon;
-  final bool noVisibility; 
+  final String? errorText;
+  final bool isObscure;
+  final TextInputType? keyboardType;
   final EdgeInsets? padding;
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
+  final VoidCallback? onPressed;
   
   const CustomTextFormField({
     super.key,
@@ -17,10 +20,13 @@ class CustomTextFormField extends StatelessWidget {
     required this.label,
     required this.prefixIcon,
     this.suffixIcon,
-    this.noVisibility = false,
+    this.errorText,
+    this.isObscure = true,
+    this.keyboardType,
     this.padding,
     this.validator,
-    this.onChanged
+    this.onChanged,
+    this.onPressed,
   });
 
   @override
@@ -33,8 +39,10 @@ class CustomTextFormField extends StatelessWidget {
           Text(title, style: TextStyle(color: Colors.white, fontSize: responsive.ip(1.6))),
           SizedBox(height: responsive.hp(1),),
           TextFormField(
+            autocorrect: false,
             style: const TextStyle(color: Colors.white),
-            obscureText: noVisibility,
+            obscureText: !isObscure,
+            keyboardType: keyboardType,
             decoration: InputDecoration(    
               contentPadding: padding,
               prefixIcon: Icon(prefixIcon),
@@ -42,12 +50,10 @@ class CustomTextFormField extends StatelessWidget {
               suffixIcon: suffixIcon != null
               ? IconButton(
                 icon: Icon(suffixIcon),
-                onPressed:(){
-                  //TODO: Permitir que se vea la contraseña
-                  print("click");
-                },
+                onPressed: onPressed,
               )
-              : null
+              : null,
+              errorText: errorText
             ),
             validator: validator,
             onChanged: onChanged,

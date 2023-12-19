@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "370641357893",
+    "project_id": "viva-city-ff76b",
+    "storage_bucket": "viva-city-ff76b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:370641357893:android:161c862093b4f7763e672c",
+        "android_client_info": {
+          "package_name": "com.franciscoxgf.viva_city"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXBB3K9t_C0B9wgHQHwZ3_IeHagAaf0mM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -8,6 +8,12 @@ final appRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/',
+      name: CheckAuthScreen.name,
+      builder: (context, state) => const CheckAuthScreen(),
+    ),
+
+    GoRoute(
+      path: '/slides',
       name: SlidesScreen.name,
       builder: (context, state) => const SlidesScreen(),
     ),

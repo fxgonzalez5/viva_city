@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import 'package:viva_city/config/theme/responsive.dart';
+import 'package:viva_city/domain/helpers/helpers.dart';
+import 'package:viva_city/domain/services/services.dart';
+import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/screens/screens.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
@@ -13,12 +17,14 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
+    final loginProvider = context.read<LoginProvider>();
 
     return Scaffold(
       body: Stack(
         children: [
           const AuthBackground(),
           SingleChildScrollView(
+            controller: loginProvider.scrollController,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: responsive.wp(12.5)),
               child: Column(
@@ -126,6 +132,7 @@ class _NavigationTextButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
+    final loginProvider = context.read<LoginProvider>();
     
     return Padding(
       padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
@@ -135,12 +142,20 @@ class _NavigationTextButtons extends StatelessWidget {
             text: 'Olvidaste tu contraseña?',
             onPressed: () {
               // TODO: Navegar pantalla de recuperacion de contraseña
+              // loginProvider.errorEmail = null;
+              // loginProvider.errorPassword = null;
+              // loginProvider.isVisible = false;
             }
           ),
           
           CustomTextButton(
             text: 'Registrarse',
-            onPressed: () => context.pushReplacementNamed(SignupScreen.name)
+            onPressed: () {
+              context.pushReplacementNamed(SignupScreen.name);
+              loginProvider.errorEmail = null;
+              loginProvider.errorPassword = null;
+              loginProvider.isVisible = false;
+            }
           ),
         ],
       ),
@@ -154,45 +169,100 @@ class _LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
+    final firebaseAuthService = FirebaseAuthService();
+    final loginProvider = context.watch<LoginProvider>();
     
     return Form(
-      // key: ,
+      key: loginProvider.formKey,
       child: Column(
         children: [
           CustomTextFormField(
-            title: "Correo electrónico/número teléfono",
-            label: "Ingresa tu correo electrónico o número",
+            keyboardType: TextInputType.emailAddress,
+            title: "Correo electrónico",
+            label: "Ingresa tu correo electrónico",
             prefixIcon: Icons.email,
-            // onChanged: (value) => loginForm.email = value,
+            errorText: loginProvider.errorEmail,
+            onChanged: (value) {
+              loginProvider.errorEmail = null;
+              loginProvider.email = value;
+            },
             validator: (value) {
               String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
               RegExp regExp = RegExp(pattern);
 
-              return regExp.hasMatch(value ?? '')
-                  ? null
-                  : 'El valor ingresado no luce como un correo';
+              if (value == null || value.isEmpty) {
+                return 'Por favor ingrese el correo electrónico';
+              } else if (!regExp.hasMatch(value)) {
+                return 'El valor ingresado no luce como un correo';
+              }
+
+              return null;
             },
           ),
           SizedBox(height: responsive.hp(2.5)),
           CustomTextFormField(
+            keyboardType: TextInputType.visiblePassword,
             title: "Contraseña",
             label: "Ingresa tu contraseña",
             prefixIcon: Icons.lock,
-            suffixIcon: Icons.remove_red_eye,
-            noVisibility: true,
-            // onChanged: (value) => loginForm.password = value,
+            suffixIcon: loginProvider.isVisible ? Icons.visibility_off : Icons.visibility,
+            errorText: loginProvider.errorPassword,
+            isObscure: loginProvider.isVisible,
+            onPressed: () => loginProvider.isVisible = !loginProvider.isVisible,
+            onChanged: (value) {
+              loginProvider.errorPassword = null;
+              loginProvider.password = value;
+            },
             validator: (value) {
-              return (value != null && value.length >= 8)
-                  ? null
-                  : 'Mínimo 8 caracteres';
+              if (value == null || value.isEmpty) {
+                return 'Por favor ingrese la contraseña';
+              } else if (value.length < 8) {
+                return 'Mínimo 8 caracteres';
+              }
+
+              return null;
             },
           ),
           SizedBox(height: responsive.hp(5)),
           CustomElevatedButton(
             text: "INGRESAR",
-            onPressed: () {
-              context.pushReplacementNamed(SlidingScreen.name);
-              //TODO: Validar ingreso con credenciales del usuario
+            onPressed: loginProvider.isLoading ? null : () async {
+              FocusScope.of(context).requestFocus(FocusNode());
+
+              if (loginProvider.formKey.currentState?.validate() == true) {
+                loginProvider.isLoading = true;
+
+                final errorMessage = await firebaseAuthService.login(loginProvider.email.trim(), loginProvider.password.trim());
+                switch (errorMessage) {
+                  case null:
+                    loginProvider.isLoading = false;
+                    Future.microtask(() => showSnackBar(context, 'Lo sentimos, no se pudo iniciar sesión.'));
+                    break;
+                  case 1:
+                    loginProvider.isLoading = false;
+                    loginProvider.errorEmail = 'No se ha encontrado una cuenta con ese correo electrónico';
+                    break;
+                  case 2:
+                    loginProvider.isLoading = false;
+                    loginProvider.errorPassword = 'Correo o contraseña incorrecto';
+                    break;
+                  case 3:
+                    loginProvider.isLoading = false;
+                    loginProvider.errorEmail = 'Correo o contraseña inválido';
+                    loginProvider.errorPassword = 'Correo o contraseña inválido';
+                    break;
+                  default:
+                    context.pushReplacementNamed(NavegationScreen.name);
+                    loginProvider.isLoading = false;
+                    loginProvider.errorEmail = null;
+                    loginProvider.errorPassword = null;
+                    loginProvider.isVisible = false;
+                    break;
+                }
+              } else {
+                await Future.delayed(const Duration(milliseconds: 10));
+                loginProvider.moveScrollToBottom();
+              }
             },
           ),
         ],

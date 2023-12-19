@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _CustomCarouselSlider(),
+        const _CustomCarouselSlider(),
 
         Expanded(
           child: ListView.builder(

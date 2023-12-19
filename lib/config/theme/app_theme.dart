@@ -45,7 +45,16 @@ class AppTheme {
       contentPadding: EdgeInsets.symmetric(vertical: Responsive(context).hp(1)),
       prefixIconColor: Colors.white,
       hintStyle: TextStyle(color: Colors.white, fontSize: Responsive(context).ip(1.25), fontWeight: FontWeight.w400),
-      suffixIconColor: Colors.white
+      suffixIconColor: Colors.white,
+      errorBorder: UnderlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(Responsive(context).ip(0.75))),
+        borderSide: BorderSide(color: secondary, width: Responsive(context).ip(0.5))
+      ),
+      focusedErrorBorder: UnderlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(Responsive(context).ip(0.75))),
+        borderSide: BorderSide(color: secondary, width: Responsive(context).ip(0.5))
+      ),
+      errorStyle: const TextStyle(color: secondary, fontWeight: FontWeight.bold)
     ),
 
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -75,7 +84,7 @@ class AppTheme {
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Responsive(context).ip(1))
           ),
-        )
+        ),
       )
     ),
   );

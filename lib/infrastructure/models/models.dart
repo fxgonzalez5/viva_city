@@ -1,0 +1,1 @@
+export 'package:viva_city/infrastructure/models/user_model.dart';
