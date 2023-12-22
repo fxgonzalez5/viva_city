@@ -26,9 +26,14 @@ class AppTheme {
       ),
     ),
 
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
       backgroundColor: primary,
-      foregroundColor: Colors.white
+      foregroundColor: Colors.white,
+      centerTitle: true,
+      titleTextStyle: TextStyle(
+        fontSize: Responsive(context).ip(1.8),
+        fontWeight: FontWeight.w500
+      )
     ),
 
     inputDecorationTheme: InputDecorationTheme(

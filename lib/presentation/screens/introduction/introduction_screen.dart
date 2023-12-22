@@ -81,6 +81,7 @@ class _Background extends StatelessWidget {
       children: [
         SizedBox(
           width: double.infinity,
+          height: double.infinity,
           child: Image.asset("assets/images/introduction.png", fit: BoxFit.cover),
         ),
         Container(

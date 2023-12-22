@@ -1,3 +1,4 @@
+export 'package:viva_city/presentation/screens/category/category_screen.dart';
 export 'package:viva_city/presentation/screens/sliding/sliding_screen.dart';
 export 'package:viva_city/presentation/screens/navigation/navegation_screen.dart';
 export 'package:viva_city/presentation/screens/introduction/introduction_screen.dart';
