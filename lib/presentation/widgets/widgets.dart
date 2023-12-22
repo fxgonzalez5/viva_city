@@ -1,3 +1,5 @@
+export 'package:viva_city/presentation/widgets/line_divider.dart';
+export  'package:viva_city/presentation/widgets/list_title_menu.dart';
 export 'package:viva_city/presentation/widgets/custom_text_button.dart';
 export 'package:viva_city/presentation/widgets/custom_elevated_button.dart';
 export 'package:viva_city/presentation/widgets/category_card.dart';

@@ -38,8 +38,8 @@ final appRouter = GoRouter(
 
     GoRoute(
       path: '/presentation',
-      name: PresentationScreen.name,
-      builder: (context, state) => const PresentationScreen(),
+      name: IntroductionScreen.name,
+      builder: (context, state) => const IntroductionScreen(),
     ),
     
     GoRoute(
@@ -52,6 +52,18 @@ final appRouter = GoRouter(
       path: '/home',
       name: HomeScreen.name,
       builder: (context, state) => const HomeScreen(),
+    ),
+
+    GoRoute(
+      path: '/category',
+      name: categoryScreen.name,
+      builder: (context, state) => const categoryScreen(),
+    ),
+
+    GoRoute(
+      path: '/subcategory',
+      name: SubCategoryScreen.name,
+      builder: (context, state) => const SubCategoryScreen(),
     ),
   ],
 );

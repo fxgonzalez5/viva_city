@@ -14,7 +14,8 @@ class AuthBackground extends StatelessWidget {
       children: [
         SizedBox(
           width: double.infinity,
-          child: Image.asset("assets/images/fondo.png", fit: BoxFit.cover),
+          height: double.infinity,
+          child: Image.asset("assets/images/background.png", fit: BoxFit.cover),
         ),
 
         Positioned(top: -12, left: -60, child: Image.asset("assets/images/logo_app.png", width: responsive.wp(45))),

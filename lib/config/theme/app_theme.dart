@@ -26,9 +26,14 @@ class AppTheme {
       ),
     ),
 
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
       backgroundColor: primary,
-      foregroundColor: Colors.white
+      foregroundColor: Colors.white,
+      centerTitle: true,
+      titleTextStyle: TextStyle(
+        fontSize: Responsive(context).ip(1.8),
+        fontWeight: FontWeight.w500
+      )
     ),
 
     inputDecorationTheme: InputDecorationTheme(
@@ -87,5 +92,11 @@ class AppTheme {
         ),
       )
     ),
+
+    dividerTheme: DividerThemeData(
+      space: Responsive(context).hp(0.5),
+      thickness: Responsive(context).hp(0.1),
+      color: secondary
+    )
   );
 }
