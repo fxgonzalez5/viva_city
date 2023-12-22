@@ -53,5 +53,11 @@ final appRouter = GoRouter(
       name: categoryScreen.name,
       builder: (context, state) => const categoryScreen(),
     ),
+
+    GoRoute(
+      path: '/subcategory',
+      name: SubCategoryScreen.name,
+      builder: (context, state) => const SubCategoryScreen(),
+    ),
   ],
 );
