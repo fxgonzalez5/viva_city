@@ -1,10 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:viva_city/config/menu/category_items.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
+import 'package:viva_city/presentation/screens/screens.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -24,7 +26,8 @@ class HomeScreen extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return CategoryCard(
                 category: categoryItems[index].category,
-                imageUrl: categoryItems[index].image,);
+                imageUrl: categoryItems[index].image,
+                onTap: ()=> context.pushNamed(categoryScreen.name, extra: {'title': categoryItems[index].title, 'titleBAR': "${categoryItems[index].category.substring(0,1)}${categoryItems[index].category.substring(1).toLowerCase()}"}),);
             },
           ),
         ),

@@ -33,7 +33,7 @@ class NavegationScreen extends StatelessWidget {
                       style: TextStyle(
                           color: Colors.white, fontSize: responsive.ip(1.2)),
                     ),
-                    SizedBox(width: responsive.wp(58),),
+                    Spacer(),
                     CircleAvatar(
                       radius: responsive.ip(1.2),
                     ) // TODO: IMAGEN DE FOTO DE USUARIO (circleavatar)

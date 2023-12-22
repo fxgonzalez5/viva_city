@@ -1,29 +1,29 @@
-class CategoryItem {
+class SubCategoryItem {
   final String image;
   final String category;
   final String title;
 
-  const CategoryItem({
+  const SubCategoryItem({
     required this.image,
     required this.category,
     required this.title,
   });
 }
 
-const List<CategoryItem> categoryItems = [
-  CategoryItem(
+const List<SubCategoryItem> subCategoryItems = [
+  SubCategoryItem(
     image: 'assets/images/category1.png',
     category: 'EVENTOS',
     title: 'Próximos eventos',
   ),
   
-  CategoryItem(
+  SubCategoryItem(
     image: 'assets/images/category2.png',
     category: 'LUGARES',
     title: 'Lugares destacados',
   ),
   
-  CategoryItem(
+  SubCategoryItem(
     image: 'assets/images/category3.png',
     category: 'HOSPEDAJE',
     title: 'Recomendados para ti',
