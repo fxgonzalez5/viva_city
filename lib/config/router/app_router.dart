@@ -32,8 +32,8 @@ final appRouter = GoRouter(
 
     GoRoute(
       path: '/presentation',
-      name: PresentationScreen.name,
-      builder: (context, state) => const PresentationScreen(),
+      name: IntroductionScreen.name,
+      builder: (context, state) => const IntroductionScreen(),
     ),
     
     GoRoute(

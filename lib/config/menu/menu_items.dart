@@ -1,48 +1,56 @@
+import 'package:flutter/widgets.dart';
+import 'package:viva_city/config/theme/custom_icons.dart';
+
 class MenuItem {
-  final String image;
-  final String category;
+  final IconData icon;
+  final String label;
+  final String? route;
 
   const MenuItem({
-    required this.image,
-    required this.category,
+    required this.icon,
+    required this.label,
+    this.route,
   });
 }
 
 const List<MenuItem> menuItems = [
   MenuItem(
-    image: 'assets/images/viva_menu.png',
-    category: 'Acerca de'
+    icon: CustomIcons.viva_city,
+    label: 'Acerca de'
   ),
   
   MenuItem(
-    image: 'assets/images/lenguaje_menu.png',
-    category: 'Lenguajes'
+    icon: CustomIcons.languaje,
+    label: 'Lenguajes'
   ),
   
   MenuItem(
-    image: 'assets/images/moneda_menu.png',
-    category: 'Moneda'
+    icon: CustomIcons.coin,
+    label: 'Moneda'
   ),
 
   MenuItem(
-    image: 'assets/images/estadovias_menu.png',
-    category: 'Estado de vías'
+    icon: CustomIcons.cross_ways,
+    label: 'Estado de vías'
   ),
 
   MenuItem(
-    image: 'assets/images/informaciong_menu.png',
-    category: 'Información general'
+    icon: CustomIcons.information,
+    label: 'Información general'
   ),
 
-];
-const List<MenuItem> menuItems2 = [
   MenuItem(
-    image: 'assets/images/t_uso_menu.png',
-    category: 'Términos de uso'
+    icon: CustomIcons.document,
+    label: 'Términos de uso'
   ),
   
   MenuItem(
-    image: 'assets/images/p_privacidad_menu.png',
-    category: 'Politica de privacidad'
-  )
+    icon: CustomIcons.verified_shield,
+    label: 'Politica de privacidad'
+  ),
+
+  MenuItem(
+    icon: CustomIcons.gear,
+    label: 'Ajustes'
+  ),
 ];

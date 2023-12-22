@@ -78,5 +78,11 @@ class AppTheme {
         )
       )
     ),
+
+    dividerTheme: DividerThemeData(
+      space: Responsive(context).hp(0.5),
+      thickness: Responsive(context).hp(0.1),
+      color: secondary
+    )
   );
 }

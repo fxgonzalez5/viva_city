@@ -20,7 +20,7 @@ class SlidingScreen extends StatelessWidget {
       controller: slidingProvider.pageController,
       onPageChanged: (int page) => slidingProvider.currentPage = page,
       children: const [
-        PresentationScreen(),
+        IntroductionScreen(),
         NavegationScreen()
       ],
     );
