@@ -32,16 +32,22 @@ class CategoryCard extends StatelessWidget {
           children: [
             !imageUrl.startsWith('http') 
             ? Image.asset(imageUrl, width: double.infinity, height: double.infinity, fit: BoxFit.cover,)
-            : Image.network(imageUrl, width: double.infinity, height: double.infinity, fit: BoxFit.cover,),
+            : FadeInImage(
+                fit: BoxFit.cover,
+                width: double.infinity, 
+                height: double.infinity,
+                placeholder: const AssetImage('assets/images/loading.gif'),
+                image: NetworkImage(imageUrl),
+              ),
             
             Align(
               alignment: Alignment.topRight,
               child: Container(
                 padding: EdgeInsets.all(responsive.wp(1.5)),
-                width: responsive.wp(30),
+                width: responsive.wp(32.5),
                 height: responsive.hp(3.5),
                 color: colors.primary,
-                child: Text(category, style: const TextStyle(color: Colors.white)),
+                child: Text(category, style: TextStyle(color: Colors.white, fontSize: responsive.ip(1.3))),
               ),
             ),
           ],

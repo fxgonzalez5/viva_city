@@ -11,6 +11,7 @@ class SignupProvider extends ChangeNotifier {
   String phone = '';
   bool _isVisibleOne = false;
   bool _isVisibleTwo = false;
+  bool _isValidNumber = false;
   bool _isLoading = false;
 
   String? get errorEmail => _errorEmail;
@@ -37,6 +38,12 @@ class SignupProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get isValidNumber => _isValidNumber;
+  set isValidNumber(bool value) {
+    _isValidNumber = value;
+    notifyListeners();
+  }
+
   bool get isLoading => _isLoading;
   set isLoading(bool value) {
     _isLoading = value;
@@ -49,6 +56,5 @@ class SignupProvider extends ChangeNotifier {
       duration: const Duration(milliseconds: 300), 
       curve: Curves.fastOutSlowIn
     );
-
   }
 }

@@ -22,7 +22,7 @@ class AppTheme {
 
     textTheme: const TextTheme(
       headlineSmall: TextStyle(
-        color: Colors.white,
+        color: primary,
       ),
     ),
 
@@ -37,19 +37,19 @@ class AppTheme {
     ),
 
     inputDecorationTheme: InputDecorationTheme(
+      isDense: true,
       filled: true,
       fillColor: Colors.white24,
       enabledBorder: UnderlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(Responsive(context).ip(0.75))),
         borderSide: BorderSide.none
-      ),             
+      ),
       focusedBorder: UnderlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(Responsive(context).ip(0.75))),
         borderSide: BorderSide.none
       ),
-      contentPadding: EdgeInsets.symmetric(vertical: Responsive(context).hp(1)),
       prefixIconColor: Colors.white,
-      hintStyle: TextStyle(color: Colors.white, fontSize: Responsive(context).ip(1.25), fontWeight: FontWeight.w400),
+      hintStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
       suffixIconColor: Colors.white,
       errorBorder: UnderlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(Responsive(context).ip(0.75))),

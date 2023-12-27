@@ -25,11 +25,12 @@ class SignupScreen extends StatelessWidget {
           const AuthBackground(),
           SingleChildScrollView(
             controller: signupProvider.scrollController,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(12.5)),
+            padding: EdgeInsets.symmetric(horizontal: responsive.wp(12.5)),
+            child: SizedBox(
+              height: responsive.hp(100),
               child: Column(
                 children: [
-                  SizedBox(height: responsive.hp(22.5)),
+                  const Spacer(flex: 4),
                   const _HeaderText(),
                   SizedBox(height: responsive.hp(3)),
                   const _SignupForm(),
@@ -43,7 +44,7 @@ class SignupScreen extends StatelessWidget {
                     ) ,
                     textAlign:TextAlign.center,
                   ),
-                  SizedBox(height: responsive.hp(2)),
+                  const Spacer(),
                 ],
               ),
             ),
@@ -194,15 +195,22 @@ class _SignupForm extends StatelessWidget {
             keyboardType: TextInputType.phone,
             title: "Número teléfono",
             label: "Escribe tu número de teléfono",
-            prefixIcon: Icons.phone_android,
-            onChanged: (value) => signupProvider.phone = value,
+            onInputChanged: (phone) {
+              final prefix = phone.dialCode;
+              String number = phone.parseNumber();
+              if (phone.parseNumber().startsWith('0')){
+                number = phone.parseNumber().substring(1);
+              }
+              signupProvider.phone = '$prefix$number';
+            },
+            onPhoneValidated: (value) => signupProvider.isValidNumber = value!,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Por favor ingrese un número de teléfono';
-              } else if (value.length < 10) {
-                return 'Mínimo 10 dígitos';
+              } else if (!signupProvider.isValidNumber) {
+                return 'Número de teléfono inválido';
               }
-
+              
               return null;
             },
           ),
@@ -233,6 +241,10 @@ class _SignupForm extends StatelessWidget {
                   default:
                     context.pushReplacementNamed(SlidingScreen.name);
                     signupProvider.isLoading = false;
+                    signupProvider.errorEmail = null;
+                    signupProvider.errorPassword = null;
+                    signupProvider.isVisibleOne = false;
+                    signupProvider.isVisibleTwo = false;
                     break;
                 }
               } else {
@@ -253,7 +265,6 @@ class _HeaderText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
-    final texts = Theme.of(context).textTheme;
 
     return SizedBox(
       width: double.infinity,
@@ -262,7 +273,7 @@ class _HeaderText extends StatelessWidget {
         children: [
           Text(
             "REGISTRO",
-            style: texts.headlineSmall
+            style: TextStyle(fontSize: responsive.ip(2), color: Colors.white),
           ),
           SizedBox(height: responsive.hp(0.5)),
           const Text(

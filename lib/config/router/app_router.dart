@@ -37,7 +37,7 @@ final appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: '/presentation',
+      path: '/introduction',
       name: IntroductionScreen.name,
       builder: (context, state) => const IntroductionScreen(),
     ),
@@ -56,8 +56,8 @@ final appRouter = GoRouter(
 
     GoRoute(
       path: '/category',
-      name: categoryScreen.name,
-      builder: (context, state) => const categoryScreen(),
+      name: CategoryScreen.name,
+      builder: (context, state) => const CategoryScreen(),
     ),
 
     GoRoute(

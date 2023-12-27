@@ -18,11 +18,16 @@ class AuthBackground extends StatelessWidget {
           child: Image.asset("assets/images/background.png", fit: BoxFit.cover),
         ),
 
-        Positioned(top: -12, left: -60, child: Image.asset("assets/images/logo_app.png", width: responsive.wp(45))),
+        Positioned(
+          top: responsive.hp(-1),
+          left: responsive.wp(-12),
+          child: Image.asset(
+            "assets/images/logo_app.png",
+            height: responsive.hp(25),
+          ),
+        ),
 
         Container(
-          width: double.infinity,
-          height: double.infinity,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,

@@ -25,11 +25,12 @@ class LoginScreen extends StatelessWidget {
           const AuthBackground(),
           SingleChildScrollView(
             controller: loginProvider.scrollController,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(12.5)),
+            padding: EdgeInsets.symmetric(horizontal: responsive.wp(12.5)),
+            child: SizedBox(
+              height: responsive.hp(100),
               child: Column(
                 children: [
-                  SizedBox(height: responsive.hp(28)),
+                  const Spacer(flex: 4),
                   const _HeaderText(),
                   SizedBox(height: responsive.hp(5)),
                   const _LoginForm(),
@@ -39,7 +40,7 @@ class LoginScreen extends StatelessWidget {
                     style: TextStyle(color: Colors.white, fontSize: responsive.ip(1.2))
                   ),
                   const _AuthBox(),
-                  SizedBox(height: responsive.hp(6.5)),
+                  const Spacer()
                 ],
               ),
             ),
@@ -277,7 +278,6 @@ class _HeaderText extends StatelessWidget {
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
     final colors = Theme.of(context).colorScheme;
-    final texts = Theme.of(context).textTheme;
 
     return SizedBox(
       width: double.infinity,
@@ -286,7 +286,7 @@ class _HeaderText extends StatelessWidget {
         children: [
           Text(
             "INGRESAR",
-            style: texts.headlineSmall,
+            style: TextStyle(fontSize: responsive.ip(2), color: Colors.white),
           ),
           Text(
             "¡Disfruta tu ciudad! Bienvenido...",
