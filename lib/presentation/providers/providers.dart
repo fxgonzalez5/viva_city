@@ -1,3 +1,4 @@
+export 'package:viva_city/presentation/providers/navegation_provider.dart';
 export 'package:viva_city/presentation/providers/category_provider.dart';
 export 'package:viva_city/presentation/providers/login_provider.dart';
 export 'package:viva_city/presentation/providers/signup_provider.dart';

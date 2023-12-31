@@ -21,9 +21,8 @@ class AppTheme {
     ),
 
     textTheme: const TextTheme(
-      headlineSmall: TextStyle(
-        color: primary,
-      ),
+      headlineSmall: TextStyle(color: primary),
+      titleLarge: TextStyle(color: primary),
     ),
 
     appBarTheme: AppBarTheme(
@@ -97,6 +96,18 @@ class AppTheme {
       space: Responsive(context).hp(0.5),
       thickness: Responsive(context).hp(0.1),
       color: secondary
-    )
+    ),
+
+    searchBarTheme: SearchBarThemeData(
+      constraints: BoxConstraints.expand(width: double.infinity, height: Responsive(context).hp(4.5)),
+      backgroundColor: MaterialStatePropertyAll(Colors.grey.shade200),
+      elevation: const MaterialStatePropertyAll(0),
+      shape: MaterialStatePropertyAll(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Responsive(context).ip(1)),
+        ),
+      ),
+      hintStyle: const MaterialStatePropertyAll(TextStyle(color: Colors.black54))
+    ),
   );
 }

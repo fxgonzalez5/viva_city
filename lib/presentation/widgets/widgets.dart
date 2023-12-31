@@ -1,3 +1,7 @@
+export 'package:viva_city/presentation/widgets/shared/subcategory_list.dart';
+export 'package:viva_city/presentation/widgets/shared/favorite_button.dart';
+export 'package:viva_city/presentation/widgets/shared/recommendation_list.dart';
+export 'package:viva_city/presentation/widgets/shared/custom_circle_avatar.dart';
 export 'package:viva_city/presentation/widgets/line_divider.dart';
 export 'package:viva_city/presentation/widgets/custom_text_button.dart';
 export 'package:viva_city/presentation/widgets/custom_elevated_button.dart';

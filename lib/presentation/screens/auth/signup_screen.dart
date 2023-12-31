@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:viva_city/config/theme/responsive.dart';
-import 'package:viva_city/domain/helpers/helpers.dart';
+import 'package:viva_city/config/helpers/helpers.dart';
 import 'package:viva_city/domain/services/services.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/screens/screens.dart';

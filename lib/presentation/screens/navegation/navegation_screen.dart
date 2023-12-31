@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import 'package:viva_city/config/menu/menu_items.dart';
 import 'package:viva_city/config/menu/navigation_items.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/domain/services/services.dart';
+import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/screens/screens.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
@@ -16,28 +18,57 @@ class NavegationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final firebaseAuthService = FirebaseAuthService();
+    final navegationProvider = context.read<NavegationProvider>();
 
     return Scaffold(
-      extendBody: true,
       appBar: AppBar(
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await firebaseAuthService.logout();
-              context.pushReplacementNamed(LoginScreen.name); 
+              context.pushReplacementNamed(LoginScreen.name);
+              navegationProvider.currentPage = 0;
             },
           )
         ],
       ),
       drawer: const _CustomDrawer(),
       body: PageView(
-        scrollDirection: Axis.vertical,
+        controller: navegationProvider.pageController,
+        physics: const NeverScrollableScrollPhysics(),
         children: const [
           HomeScreen(),
+          FavoritesScreen()
         ],
       ),
       bottomNavigationBar: const _CustomNavigationBar(),
+    );
+  }
+}
+
+class _CustomNavigationBar extends StatelessWidget {
+  const _CustomNavigationBar();
+
+  @override
+  Widget build(BuildContext context) {
+    final responsive = Responsive(context);
+    final navegationProvider = context.watch<NavegationProvider>();
+
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      height: responsive.hp(10),
+      width: double.infinity,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(responsive.ip(3)),
+        topRight: Radius.circular(responsive.ip(3)),
+      )),
+      child: BottomNavigationBar(
+        currentIndex: navegationProvider.currentPage,
+        items: navegationItems,
+        onTap: (int value) => navegationProvider.currentPage = value,
+      ),
     );
   }
 }
@@ -61,15 +92,15 @@ class _CustomDrawer extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: responsive.hp(1)),
               physics: const BouncingScrollPhysics(),
               children: [
-                ...menuItems.getRange(0, 5).map(
+                ...menuItems.sublist(0, 5).map(
                   (item) => _CustomListTile(item),
                 ),
                 const _CustomLineDivider(),
-                ...menuItems.getRange(5, 7).map(
+                ...menuItems.sublist(5, 7).map(
                   (item) => _CustomListTile(item),
                 ),
                 const _CustomLineDivider(),
-                ...menuItems.getRange(7, menuItems.length).map(
+                ...menuItems.sublist(7, menuItems.length).map(
                   (item) => _CustomListTile(item),
                 ),
               ]
@@ -128,7 +159,6 @@ class _CustomDrawerHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final responsive = Responsive(context);
-    const urlPhoto = 'assets/images/no_photo.png';
 
     return AppBar(
       automaticallyImplyLeading: false,
@@ -136,48 +166,17 @@ class _CustomDrawerHeader extends StatelessWidget {
       backgroundColor: colors.secondary,
       title: const Text('MENU'),
       actions: [
-        LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {  
-          return Container(
-            width: constraints.maxHeight,
-            height: constraints.maxHeight,
-            margin: EdgeInsets.symmetric(vertical: responsive.hp(0.5), horizontal: responsive.wp(3.5)),
-            decoration: BoxDecoration(
-              image: !urlPhoto.startsWith('https:')
-              ? const DecorationImage(image: AssetImage(urlPhoto))
-              : const DecorationImage(image: NetworkImage(urlPhoto)),
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: responsive.wp(0.5))
-            ),
-          );
-        },
-          
+        LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {  
+            return CustomCircleAvatar(
+              radius: constraints.maxHeight,
+              margin: EdgeInsets.symmetric(vertical: responsive.hp(0.5), horizontal: responsive.wp(3.5)),
+              strokeColor: Colors.white,
+              strokeWidth: responsive.wp(0.5),
+            );
+          },
         ),
       ],
     ); 
-  }
-}
-
-
-class _CustomNavigationBar extends StatelessWidget {
-  const _CustomNavigationBar();
-
-  @override
-  Widget build(BuildContext context) {
-    final responsive = Responsive(context);
-
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      height: responsive.hp(10),
-      width: double.infinity,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(responsive.ip(3)),
-        topRight: Radius.circular(responsive.ip(3)),
-      )),
-      child: BottomNavigationBar(
-        items: navegationItems,
-        onTap: (int value) {},
-      ),
-    );
   }
 }

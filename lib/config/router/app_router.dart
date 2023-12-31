@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-
 import 'package:viva_city/presentation/screens/screens.dart';
 
 //* GoRouter configuration
@@ -64,6 +63,12 @@ final appRouter = GoRouter(
       path: '/subcategory',
       name: SubCategoryScreen.name,
       builder: (context, state) => const SubCategoryScreen(),
+    ),
+    
+    GoRoute(
+      path: '/favorites',
+      name: FavoritesScreen.name,
+      builder: (context, state) => const FavoritesScreen(),
     ),
   ],
 );
