@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:viva_city/config/menu/items_of_subcategory.dart';
 import 'package:viva_city/config/theme/responsive.dart';
+import 'package:viva_city/presentation/screens/screens.dart';
 import 'package:viva_city/presentation/widgets/sub_card.dart';
 class SubCategoryScreen extends StatelessWidget {
   static const String name = 'subcategory_screen'; 
@@ -57,6 +58,7 @@ class SubCategoryScreen extends StatelessWidget {
                          ubi: ItemsOfSub[index].ubi, 
                          distance: ItemsOfSub[index].distance, 
                          description: ItemsOfSub[index].description,
+                         onTap: ()=> context.pushNamed(DescriptionCategory.name, extra: {'title': ItemsOfSub[index].category}),
                         
                       );
                     },
