@@ -70,5 +70,11 @@ final appRouter = GoRouter(
       name: FavoritesScreen.name,
       builder: (context, state) => const FavoritesScreen(),
     ),
+    
+    GoRoute(
+      path: '/profile',
+      name: ProfileScreen.name,
+      builder: (context, state) => const ProfileScreen(),
+    ),
   ],
 );

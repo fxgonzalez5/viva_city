@@ -7,7 +7,7 @@ class NavegationProvider extends ChangeNotifier {
   int get currentPage => _currentPage;
   set currentPage(int value) {
     _currentPage = value;
-    pageController.animateToPage(value, duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+    pageController.jumpToPage(value);
     notifyListeners();
   }
 }

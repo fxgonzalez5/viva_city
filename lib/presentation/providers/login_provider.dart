@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class LoginProvider extends ChangeNotifier {
   final scrollController = ScrollController();
-  final formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String email = '';
   String? _errorEmail;
   String password = '';

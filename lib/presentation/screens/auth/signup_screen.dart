@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/config/helpers/helpers.dart';
-import 'package:viva_city/domain/services/services.dart';
+import 'package:viva_city/presentation/services/services.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/screens/screens.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
@@ -96,7 +96,7 @@ class _SignupForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
     final firebaseAuthService = FirebaseAuthService();
-    final signupProvider = context.watch<SignupProvider>();
+    final signupProvider = context.read<SignupProvider>();
 
     return Form(
       key: signupProvider.formKey,
@@ -239,6 +239,7 @@ class _SignupForm extends StatelessWidget {
                     signupProvider.errorPassword = 'La contraseña es débil';
                     break;
                   default:
+                    context.read<ProfileProvider>().user = await firebaseAuthService.getUser();
                     context.pushReplacementNamed(SlidingScreen.name);
                     signupProvider.isLoading = false;
                     signupProvider.errorEmail = null;

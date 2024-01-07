@@ -19,6 +19,8 @@ class AppTheme {
       secondary: secondary,
       brightness: isDarkMode ? Brightness.dark : Brightness.light,
     ),
+    
+    splashColor: Colors.transparent,
 
     textTheme: const TextTheme(
       headlineSmall: TextStyle(color: primary),
@@ -92,10 +94,31 @@ class AppTheme {
       )
     ),
 
+    listTileTheme: const ListTileThemeData(
+      dense: true,
+      contentPadding: EdgeInsets.zero
+    ),
+
+    expansionTileTheme: ExpansionTileThemeData(
+      shape: const RoundedRectangleBorder(),
+      iconColor: Colors.black,
+      childrenPadding: EdgeInsets.only(left: Responsive(context).wp(10))
+    ),
+
     dividerTheme: DividerThemeData(
       space: Responsive(context).hp(0.5),
       thickness: Responsive(context).hp(0.1),
       color: secondary
+    ),
+
+    cardTheme: CardTheme(
+      elevation: 0,
+      color: secondary.withOpacity(0.25),
+      surfaceTintColor: secondary,
+      shadowColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Responsive(context).ip(0.5)),
+      )
     ),
 
     searchBarTheme: SearchBarThemeData(

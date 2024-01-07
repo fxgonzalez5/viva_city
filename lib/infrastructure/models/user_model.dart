@@ -10,7 +10,10 @@ class UserModel {
   final String? city;
   final String? province;
   final String? country;
-  final List<String>? interests;
+  final List<String> interests;
+  final bool eventNotification;
+  final bool promotionsNotification;
+  final bool emailNotification;
 
   UserModel({
     required this.id,
@@ -22,7 +25,10 @@ class UserModel {
     this.city,
     this.province,
     this.country,
-    this.interests,
+    this.interests = const [],
+    this.eventNotification = false,
+    this.promotionsNotification = false,
+    this.emailNotification = false,
   });
 
   factory UserModel.fromJson(String str) => UserModel.fromMap(json.decode(str));
@@ -39,7 +45,11 @@ class UserModel {
     city: json["city"],
     province: json["province"],
     country: json["country"],
-    interests: json["interests"] == null ? [] : List<String>.from(json["interests"]!.map((x) => x)),
+    interests: List<String>.from(json["interests"].map((x) => x)),
+    eventNotification: json["eventNotification"],
+    promotionsNotification: json["promotionsNotification"],
+    emailNotification: json["emailNotification"],
+
   );
 
   Map<String, dynamic> toMap() => {
@@ -52,6 +62,9 @@ class UserModel {
     "city": city,
     "province": province,
     "country": country,
-    "interests": interests == null ? [] : List<dynamic>.from(interests!.map((x) => x)),
+    "interests": interests,
+    "eventNotification": eventNotification,
+    "promotionsNotification": promotionsNotification,
+    "emailNotification": emailNotification, 
   };
 }

@@ -8,7 +8,7 @@ const List<BottomNavigationBarItem> navegationItems = [
 
   BottomNavigationBarItem(
     icon: Icon(Icons.volunteer_activism_outlined),
-    label: 'Servicios'
+    label: 'Servicios',
   ),
 
   BottomNavigationBarItem(

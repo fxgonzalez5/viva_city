@@ -13,9 +13,9 @@ class FirebaseAuthService {
   }
 
   Future<UserModel?> getUser() async {
-    DocumentSnapshot snapshot = await _firestore.collection('users').doc(_auth.currentUser!.uid).get();
+    DocumentSnapshot snapshot = await _firestore.collection('users').doc(_auth.currentUser?.uid).get();
     return UserModel.fromMap(snapshot.data() as Map<String, dynamic>);
-  }  
+  }
 
   Future<int?> createAccount(String name, String email, String password, String phone,) async {
     try {
@@ -50,7 +50,7 @@ class FirebaseAuthService {
 
   Future<int?> login(String email, String password) async {
     try {
-      final UserCredential credential = await _auth.signInWithEmailAndPassword(
+      await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );

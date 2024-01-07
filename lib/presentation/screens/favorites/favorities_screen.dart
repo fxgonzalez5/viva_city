@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:viva_city/config/menu/list_items.dart';
 import 'package:viva_city/config/theme/custom_icons.dart';
 import 'package:viva_city/config/theme/responsive.dart';
+import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 
@@ -14,7 +16,6 @@ class FavoritesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
     final texts = Theme.of(context).textTheme;
-    final colors = Theme.of(context).colorScheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,14 +87,17 @@ class _Head extends StatelessWidget {
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
     final texts = Theme.of(context).textTheme;
+    final profileProvider = context.read<ProfileProvider>();
+    final name = profileProvider.user!.name.split(' ')[0];
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: responsive.hp(1.5), horizontal: responsive.wp(5)),
       child: Row(
         children: [
-          Text('Hola, Nombre', style: texts.headlineSmall),
+          Text('Hola, $name', style: texts.headlineSmall),
           const Spacer(),
           CustomCircleAvatar(
+            imagePath: profileProvider.user!.photoUrl,
             radius: responsive.wp(10),
           ),
         ],

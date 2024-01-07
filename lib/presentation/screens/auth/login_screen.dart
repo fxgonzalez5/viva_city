@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/config/helpers/helpers.dart';
-import 'package:viva_city/domain/services/services.dart';
+import 'package:viva_city/presentation/services/services.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/screens/screens.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
@@ -253,6 +253,7 @@ class _LoginForm extends StatelessWidget {
                     loginProvider.errorPassword = 'Correo o contraseña inválido';
                     break;
                   default:
+                    context.read<ProfileProvider>().user = await firebaseAuthService.getUser();
                     context.pushReplacementNamed(NavegationScreen.name);
                     loginProvider.isLoading = false;
                     loginProvider.errorEmail = null;

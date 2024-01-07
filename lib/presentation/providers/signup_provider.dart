@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SignupProvider extends ChangeNotifier {
   final scrollController = ScrollController();
-  final formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String name = '';
   String email = '';
   String? _errorEmail;
