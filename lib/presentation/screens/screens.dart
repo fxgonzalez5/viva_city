@@ -1,3 +1,4 @@
+export 'package:viva_city/presentation/screens/profile/edit_profile_screen.dart';
 export 'package:viva_city/presentation/screens/profile/profile_screen.dart';
 export 'package:viva_city/presentation/screens/favorites/favorities_screen.dart';
 export 'package:viva_city/presentation/screens/category/sub_category_screen.dart';

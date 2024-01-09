@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
+import 'package:viva_city/presentation/screens/screens.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 
@@ -56,7 +57,7 @@ class _Information extends StatelessWidget {
           children: [
             _CustomListTile(title: 'Correo electrónico', subtitle: profileProvider.user!.email),
             _CustomListTile(title: 'Teléfono', subtitle: profileProvider.user!.phone),
-            _CustomListTile(title: 'Fecha de cumpleaños', subtitle: profileProvider.user!.birthdate ?? ''),
+            _CustomListTile(title: 'Fecha de cumpleaños', subtitle: profileProvider.user!.birthdate),
           ],
         ),
         _CustomExpansionTile(
@@ -121,7 +122,7 @@ class _Information extends StatelessWidget {
         Center(
           child: ElevatedButton(
             style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(colors.secondary)),
-            onPressed: () => context.pushNamed(''), 
+            onPressed: () => context.pushNamed(EditProfileScreen.name), 
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
               child: Text('Editar', style: TextStyle(fontSize: responsive.ip(1.4))),
@@ -135,11 +136,11 @@ class _Information extends StatelessWidget {
 
 class _CustomListTile extends StatelessWidget {
   final String title;
-  final String subtitle;
+  final String? subtitle;
 
   const _CustomListTile({
     required this.title,
-    required this.subtitle
+    this.subtitle
   });
 
   @override
@@ -151,8 +152,8 @@ class _CustomListTile extends StatelessWidget {
       children: [
         ListTile(
           visualDensity: VisualDensity.compact,
-          title: Text(title, style: TextStyle(color: subtitle != '' ? colors.secondary : Colors.grey, fontSize: responsive.ip(1.5))),
-          subtitle: Text(subtitle, style: TextStyle(color: Colors.black54, fontSize: responsive.ip(1.4))),
+          title: Text(title, style: TextStyle(color: colors.secondary, fontSize: responsive.ip(1.5))),
+          subtitle: Text(subtitle ?? '', style: TextStyle(color: Colors.black54, fontSize: responsive.ip(1.4))),
         ),
         LineDivider(
           height: responsive.hp(0.05),
@@ -259,6 +260,7 @@ class _UserCard extends StatelessWidget {
     final responsive = Responsive(context);
     final texts = Theme.of(context).textTheme;
     final userProvider = context.read<ProfileProvider>();
+    final residence = userProvider.user!.city != null ? '${userProvider.user!.city}, ${userProvider.user!.province}, ${userProvider.user!.country}' : 'Residencia desconocida';
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: responsive.hp(2.5), horizontal: responsive.wp(6)),
@@ -278,7 +280,7 @@ class _UserCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(userProvider.user!.name, style: texts.headlineSmall!.copyWith(color: Colors.black),),
-                Text('Loja, Loja, Ecuador', style: texts.titleMedium!.copyWith(color: Colors.grey, fontWeight: FontWeight.normal),),
+                Text(residence, style: texts.titleMedium!.copyWith(color: Colors.grey, fontWeight: FontWeight.normal),),
               ],
             ),
           )

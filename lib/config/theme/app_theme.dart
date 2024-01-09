@@ -41,6 +41,7 @@ class AppTheme {
       isDense: true,
       filled: true,
       fillColor: Colors.white24,
+      floatingLabelBehavior: FloatingLabelBehavior.always,
       enabledBorder: UnderlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(Responsive(context).ip(0.75))),
         borderSide: BorderSide.none
@@ -50,6 +51,7 @@ class AppTheme {
         borderSide: BorderSide.none
       ),
       prefixIconColor: Colors.white,
+      labelStyle: TextStyle(color: secondary, fontSize: Responsive(context).ip(2), height: 1),
       hintStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
       suffixIconColor: Colors.white,
       errorBorder: UnderlineInputBorder(
@@ -103,6 +105,12 @@ class AppTheme {
       shape: const RoundedRectangleBorder(),
       iconColor: Colors.black,
       childrenPadding: EdgeInsets.only(left: Responsive(context).wp(10))
+    ),
+
+    switchTheme: SwitchThemeData(
+      thumbColor: MaterialStatePropertyAll(secondary.withOpacity(0.85)),
+      trackOutlineColor: MaterialStatePropertyAll(primary.withOpacity(0.75)),
+      trackColor: MaterialStatePropertyAll(primary.withOpacity(0.5)),
     ),
 
     dividerTheme: DividerThemeData(

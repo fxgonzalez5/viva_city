@@ -30,6 +30,7 @@ environment:
 dependencies:
   carousel_slider: ^4.2.1
   cloud_firestore: ^4.13.6
+  country_state_city: ^0.1.6
   cupertino_icons: ^1.0.2
   firebase_auth: ^4.15.3
   firebase_core: ^2.24.2
@@ -70,9 +71,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family:  CustomIcons
+    - family: CustomIcons
       fonts:
-       - asset: assets/fonts/CustomIcons.ttf
+        - asset: assets/fonts/CustomIcons.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:
