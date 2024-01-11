@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:viva_city/config/theme/responsive.dart';
+import 'package:viva_city/presentation/screens/screens.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class SubcategoryList extends StatelessWidget {
   final List<dynamic> items;
+  final String? category;
 
   const SubcategoryList({
     super.key,
-    required this.items
+    required this.items, 
+    this.category
   });
 
   @override
@@ -25,8 +29,19 @@ class SubcategoryList extends StatelessWidget {
           distance: items[index].distance,
           description: items[index].description,
           onTap: () {
-            // TODO: Implementar la navegación a la pantalla de detalle con su respectiva información
-          },
+            switch (category) {
+              case 'Eventos':
+                 context.pushNamed(DescriptionCategoryEventos.name, extra:  {'title': items[index].title});
+                break;
+              case 'Lugares':
+                 context.pushNamed(DescriptionCategoryLugares.name, extra:  {'title': items[index].title});
+                break;
+              case 'Hospedaje':
+                 context.pushNamed(DescriptionCategoryHoteles.name, extra:  {'title': items[index].title});
+                break;
+              default:
+            }
+          }
         ),
         separatorBuilder: (context, index) => LineDivider(
           color: Colors.grey,

@@ -28,11 +28,11 @@ class SubCategoryScreen extends StatelessWidget {
                 Tab(icon: Icon(Icons.map_outlined, size: responsive.ip(3)))
               ],
             ),
-            const Expanded(
+             Expanded(
               child: TabBarView(
                 children: [
-                  SubcategoryList(items: listItems),
-                  Center(child: Text('Mapa')), // TODO: Construir la pantalla del mapa
+                  SubcategoryList(items: listItems, category: data['category'],),
+                  const Center(child: Text('Mapa')), // TODO: Construir la pantalla del mapa
                 ],
               ),
             ),

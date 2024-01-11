@@ -1,4 +1,7 @@
-export 'package:viva_city/presentation/screens/subCategory/description/description_category.dart';
+
+export 'package:viva_city/presentation/screens/category/subcategory/description_category_events.dart';
+export 'package:viva_city/presentation/screens/category/subcategory/description_category_hoteles.dart';
+export 'package:viva_city/presentation/screens/category/subcategory/description_category_lugares.dart';
 export 'package:viva_city/presentation/screens/profile/edit_profile_screen.dart';
 export 'package:viva_city/presentation/screens/profile/profile_screen.dart';
 export 'package:viva_city/presentation/screens/favorites/favorities_screen.dart';

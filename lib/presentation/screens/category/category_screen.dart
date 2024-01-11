@@ -40,7 +40,7 @@ class CategoryScreen extends StatelessWidget {
                 return CategoryCard(
                   category: subCategorys[index].toUpperCase(),
                   imageUrl: data['subCategory'][index],
-                  onTap: () => context.pushNamed(SubCategoryScreen.name, extra:  {'titleAppBar': subCategorys[index].toUpperCase()}),
+                  onTap: () => context.pushNamed(SubCategoryScreen.name, extra:  {'titleAppBar': subCategorys[index].toUpperCase(), 'category': data["titleAppBar"]}),
                 );
               },
             ),

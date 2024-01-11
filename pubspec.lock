@@ -368,6 +368,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.1"
+  rating_bar_custom:
+    dependency: "direct main"
+    description:
+      name: rating_bar_custom
+      sha256: f182363a143f6a3dc1d350519dac1b09d7129f7f4a31d030df0b5cf273503f6c
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   shared_preferences:
     dependency: "direct main"
     description:
