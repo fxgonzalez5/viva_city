@@ -29,7 +29,7 @@ class NavegationScreen extends StatelessWidget {
             onPressed: () async {
               await firebaseAuthService.logout();
               profileProvider.expanded.clear();
-              context.pushReplacementNamed(LoginScreen.name);
+              Future.microtask(() => context.pushReplacementNamed(LoginScreen.name));
               navegationProvider.currentPage = 0;
             },
           )
@@ -75,7 +75,7 @@ class _CustomNavigationBar extends StatelessWidget {
         currentIndex: navegationProvider.currentPage,
         items: navegationItems,
         onTap: (int value) {
-          if (navegationProvider.currentPage == 4 && value != 4)  profileProvider.expanded.clear(); 
+          if (navegationProvider.currentPage == 4 && value != 4) profileProvider.clearExpanded(); 
           if (value != 1) navegationProvider.currentPage =  value;
         },
       ),

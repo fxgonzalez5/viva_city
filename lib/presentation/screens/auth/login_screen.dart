@@ -174,7 +174,7 @@ class _LoginForm extends StatelessWidget {
     final loginProvider = context.watch<LoginProvider>();
     
     return Form(
-      key: loginProvider.formKey,
+      key: loginProvider.loginFormKey,
       child: Column(
         children: [
           CustomTextFormField(
@@ -230,7 +230,7 @@ class _LoginForm extends StatelessWidget {
             onPressed: loginProvider.isLoading ? null : () async {
               FocusScope.of(context).requestFocus(FocusNode());
 
-              if (loginProvider.formKey.currentState?.validate() == true) {
+              if (loginProvider.isValidForm()) {
                 loginProvider.isLoading = true;
 
                 final errorMessage = await firebaseAuthService.login(loginProvider.email.trim(), loginProvider.password.trim());
@@ -254,7 +254,7 @@ class _LoginForm extends StatelessWidget {
                     break;
                   default:
                     context.read<ProfileProvider>().user = await firebaseAuthService.getUser();
-                    context.pushReplacementNamed(NavegationScreen.name);
+                    Future.microtask(() => context.pushReplacementNamed(NavegationScreen.name));
                     loginProvider.isLoading = false;
                     loginProvider.errorEmail = null;
                     loginProvider.errorPassword = null;

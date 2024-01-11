@@ -7,6 +7,7 @@ class ProfileProvider extends ChangeNotifier {
   bool isActiveNotification1 = false;
   bool isActiveNotification2 = false;
   bool isActiveNotification3 = false;
+  bool _isValidNumber = false;
 
   void addExpanded(int value) {
     expanded.add(value);
@@ -15,6 +16,17 @@ class ProfileProvider extends ChangeNotifier {
 
   void removeExpanded(int value) {
     expanded.remove(value);
+    notifyListeners();
+  }
+  
+  void clearExpanded() {
+    expanded.clear();
+    notifyListeners();
+  }
+
+  bool get isValidNumber => _isValidNumber;
+  set isValidNumber(bool value) {
+    _isValidNumber = value;
     notifyListeners();
   }
 }

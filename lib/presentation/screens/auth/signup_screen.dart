@@ -99,7 +99,7 @@ class _SignupForm extends StatelessWidget {
     final signupProvider = context.read<SignupProvider>();
 
     return Form(
-      key: signupProvider.formKey,
+      key: signupProvider.singupFormKey,
       child: Column(
         children: [
           CustomTextFormField(
@@ -221,7 +221,7 @@ class _SignupForm extends StatelessWidget {
             onPressed: signupProvider.isLoading ? null : () async {
               FocusScope.of(context).requestFocus(FocusNode());
 
-              if (signupProvider.formKey.currentState?.validate() == true) {
+              if (signupProvider.isValidForm()) {
                 signupProvider.isLoading = true;
 
                 final errorMessage = await firebaseAuthService.createAccount(signupProvider.name.trim(), signupProvider.email.trim(), signupProvider.password.trim(), signupProvider.phone.trim(),);
@@ -240,7 +240,7 @@ class _SignupForm extends StatelessWidget {
                     break;
                   default:
                     context.read<ProfileProvider>().user = await firebaseAuthService.getUser();
-                    context.pushReplacementNamed(SlidingScreen.name);
+                    Future.microtask(() => context.pushReplacementNamed(SlidingScreen.name));
                     signupProvider.isLoading = false;
                     signupProvider.errorEmail = null;
                     signupProvider.errorPassword = null;
