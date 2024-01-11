@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
 import 'package:viva_city/presentation/screens/screens.dart';
-import 'package:viva_city/presentation/screens/subCategory/description/description_category.dart';
 
 //* GoRouter configuration
 final appRouter = GoRouter(
@@ -66,12 +65,25 @@ final appRouter = GoRouter(
       builder: (context, state) => const SubCategoryScreen(),
     ),
 
+    
     GoRoute(
-      path: '/description',
-      name: DescriptionCategory.name,
-      builder: (context, state) => const DescriptionCategory(),
+      path: '/events',
+      name: DescriptionCategoryEventos.name,
+      builder: (context, state) => const DescriptionCategoryEventos(),
     ),
     
+    GoRoute(
+      path: '/place',
+      name: DescriptionCategoryLugares.name,
+      builder: (context, state) => const DescriptionCategoryLugares(),
+    ),
+
+    GoRoute(
+      path: '/hotel',
+      name: DescriptionCategoryHoteles.name,
+      builder: (context, state) => const DescriptionCategoryHoteles(),
+    ),
+
     GoRoute(
       path: '/favorites',
       name: FavoritesScreen.name,
