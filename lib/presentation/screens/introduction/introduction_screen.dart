@@ -49,10 +49,7 @@ class _Foreground extends StatelessWidget {
           'Hoy es un día para disfrutar',
           style: TextStyle(fontSize: responsive.ip(2.2), color: Colors.white),
         ),
-        LineDivider(
-          start: responsive.wp(25),
-          end: responsive.wp(25),
-        ),
+        LineDivider(width: responsive.wp(75)),
         SizedBox(height: responsive.hp(5.5)),
         Icon(Icons.explore_outlined, color: Colors.white, size: responsive.ip(4)),
         SizedBox(height: responsive.hp(1.5)),
@@ -84,11 +81,7 @@ class _Background extends StatelessWidget {
           height: double.infinity,
           child: Image.asset("assets/images/introduction.png", fit: BoxFit.cover),
         ),
-        Container(
-          decoration:  const BoxDecoration(
-            color: Colors.black54,
-          ),
-        ),
+        Container(color: Colors.black54),
       ],
     );
   }

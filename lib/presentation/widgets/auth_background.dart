@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:viva_city/config/theme/responsive.dart';
 
 class AuthBackground extends StatelessWidget {
   const AuthBackground({
@@ -7,6 +8,8 @@ class AuthBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final responsive = Responsive(context);
+
     return Stack(
       children: [
         SizedBox(
@@ -14,15 +17,28 @@ class AuthBackground extends StatelessWidget {
           height: double.infinity,
           child: Image.asset("assets/images/background.png", fit: BoxFit.cover),
         ),
-        Container(
-            decoration: BoxDecoration(
-          gradient: LinearGradient(begin: Alignment.topCenter, colors: [
-            const Color(0xff3D238E).withOpacity(0.85),
-            const Color(0xff3D23CC).withOpacity(0.85),
-          ]),
-        )),
+
         Positioned(
-            top: -10, left: -55, child: Image.asset("assets/images/logo_viva_city.png")),
+          top: responsive.hp(-1),
+          left: responsive.wp(-12),
+          child: Image.asset(
+            "assets/images/logo_app.png",
+            height: responsive.hp(25),
+          ),
+        ),
+
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                const Color(0xff3D238E).withOpacity(0.85),
+                const Color(0xff3D23CC).withOpacity(0.85),
+              ]
+            ),
+          )
+        ),
       ],
     );
   }

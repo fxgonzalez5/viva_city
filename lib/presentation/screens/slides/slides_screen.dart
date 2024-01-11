@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:viva_city/config/menu/slider_items.dart';
+import 'package:viva_city/config/preferences/user_preferences.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/screens/screens.dart';
@@ -28,11 +29,13 @@ class SlidesScreen extends StatelessWidget {
           image: sliderItems[index].image,
           emphasis: sliderItems[index].emphasis,
           description: sliderItems[index].description,
-          onPressed: () {
+          onPressed: () async {
             if (slidesProvider.currentPage < sliderItems.length - 1){
               slidesProvider.currentPage++;
             } else {
               context.pushReplacementNamed(LoginScreen.name);
+              await Future.delayed(const Duration(milliseconds: 1500));
+              UserPreferences.firstTime = false;
             }
           },
         )
@@ -62,8 +65,9 @@ class _CustomSlide extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return Stack(
+      fit: StackFit.expand,
       children: [
-        Image.asset(image, width: double.infinity, fit: BoxFit.cover,),
+        Image.asset(image, fit: BoxFit.cover),
         const _DarkEffect(),
         Center(
           child: Column(
@@ -130,7 +134,7 @@ class _EmphasizedText extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return SizedBox(
-      width: responsive.wp(45),
+      width: responsive.wp(50),
       child: Text(
         text,
         style: TextStyle(

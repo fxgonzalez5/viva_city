@@ -78,5 +78,3 @@ class SubCategoryScreen extends StatelessWidget {
     );
   }
 }
-
-

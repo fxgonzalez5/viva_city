@@ -14,15 +14,17 @@ class SlidingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final slidingProvider = context.watch<SlidingProvider>();
 
-    return PageView(
-      physics: slidingProvider.hasSlid ? const NeverScrollableScrollPhysics() : null,
-      scrollDirection: Axis.vertical,
-      controller: slidingProvider.pageController,
-      onPageChanged: (int page) => slidingProvider.currentPage = page,
-      children: const [
-        IntroductionScreen(),
-        NavegationScreen()
-      ],
+    return Scaffold(
+      body: PageView(
+        physics: slidingProvider.hasSlid ? const NeverScrollableScrollPhysics() : null,
+        scrollDirection: Axis.vertical,
+        controller: slidingProvider.pageController,
+        onPageChanged: (int page) => slidingProvider.currentPage = page,
+        children: const [
+          IntroductionScreen(),
+          NavegationScreen()
+        ],
+      ),
     );
   }
 }

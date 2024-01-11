@@ -21,7 +21,8 @@ class CustomTextButton extends StatelessWidget {
     return TextButton(
       style: const ButtonStyle(
         visualDensity: VisualDensity.compact,
-        splashFactory: NoSplash.splashFactory
+        splashFactory: NoSplash.splashFactory,
+        overlayColor: MaterialStatePropertyAll(Colors.transparent)
       ),
       onPressed: onPressed,
       child: Text(text, style: TextStyle(color: color, fontSize: responsive.ip(1.5), fontWeight: FontWeight.w400),),

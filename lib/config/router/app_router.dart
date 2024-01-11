@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-
 import 'package:viva_city/presentation/screens/screens.dart';
 import 'package:viva_city/presentation/screens/subCategory/description/description_category.dart';
 
@@ -9,6 +8,12 @@ final appRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/',
+      name: CheckAuthScreen.name,
+      builder: (context, state) => const CheckAuthScreen(),
+    ),
+
+    GoRoute(
+      path: '/slides',
       name: SlidesScreen.name,
       builder: (context, state) => const SlidesScreen(),
     ),
@@ -32,7 +37,7 @@ final appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: '/presentation',
+      path: '/introduction',
       name: IntroductionScreen.name,
       builder: (context, state) => const IntroductionScreen(),
     ),
@@ -51,8 +56,8 @@ final appRouter = GoRouter(
 
     GoRoute(
       path: '/category',
-      name: categoryScreen.name,
-      builder: (context, state) => const categoryScreen(),
+      name: CategoryScreen.name,
+      builder: (context, state) => const CategoryScreen(),
     ),
 
     GoRoute(
@@ -65,6 +70,24 @@ final appRouter = GoRouter(
       path: '/description',
       name: DescriptionCategory.name,
       builder: (context, state) => const DescriptionCategory(),
+    ),
+    
+    GoRoute(
+      path: '/favorites',
+      name: FavoritesScreen.name,
+      builder: (context, state) => const FavoritesScreen(),
+    ),
+    
+    GoRoute(
+      path: '/profile',
+      name: ProfileScreen.name,
+      builder: (context, state) => const ProfileScreen(),
+    ),
+    
+    GoRoute(
+      path: '/edit_profile',
+      name: EditProfileScreen.name,
+      builder: (context, state) => const EditProfileScreen(),
     ),
   ],
 );

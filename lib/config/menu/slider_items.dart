@@ -38,6 +38,6 @@ const List<SliderItem> sliderItems = [
   SliderItem(
     image: 'assets/images/slide5.png',
     emphasis: 'Puedes obtener grandes beneficios con nuestras marcas aliadas',
-    description: 'Descuentos y promociones en varios lugares como: hoteles, bares, restaurantes etc.\nRegístrate y consíguelos.'
+    description: 'Descuentos y promociones en varios lugares como: hoteles, bares, restaurantes etc\nRegístrate y consíguelos.'
   ),
 ];

@@ -19,11 +19,12 @@ class AppTheme {
       secondary: secondary,
       brightness: isDarkMode ? Brightness.dark : Brightness.light,
     ),
+    
+    splashColor: Colors.transparent,
 
     textTheme: const TextTheme(
-      headlineSmall: TextStyle(
-        color: Colors.white,
-      ),
+      headlineSmall: TextStyle(color: primary),
+      titleLarge: TextStyle(color: primary),
     ),
 
     appBarTheme: AppBarTheme(
@@ -37,20 +38,31 @@ class AppTheme {
     ),
 
     inputDecorationTheme: InputDecorationTheme(
+      isDense: true,
       filled: true,
       fillColor: Colors.white24,
+      floatingLabelBehavior: FloatingLabelBehavior.always,
       enabledBorder: UnderlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(Responsive(context).ip(0.75))),
         borderSide: BorderSide.none
-      ),             
+      ),
       focusedBorder: UnderlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(Responsive(context).ip(0.75))),
         borderSide: BorderSide.none
       ),
-      contentPadding: EdgeInsets.symmetric(vertical: Responsive(context).hp(1)),
       prefixIconColor: Colors.white,
-      hintStyle: TextStyle(color: Colors.white, fontSize: Responsive(context).ip(1.25), fontWeight: FontWeight.w400),
-      suffixIconColor: Colors.white
+      labelStyle: TextStyle(color: secondary, fontSize: Responsive(context).ip(2), height: 1),
+      hintStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
+      suffixIconColor: Colors.white,
+      errorBorder: UnderlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(Responsive(context).ip(0.75))),
+        borderSide: BorderSide(color: secondary, width: Responsive(context).ip(0.5))
+      ),
+      focusedErrorBorder: UnderlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(Responsive(context).ip(0.75))),
+        borderSide: BorderSide(color: secondary, width: Responsive(context).ip(0.5))
+      ),
+      errorStyle: const TextStyle(color: secondary, fontWeight: FontWeight.bold)
     ),
 
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -80,14 +92,53 @@ class AppTheme {
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Responsive(context).ip(1))
           ),
-        )
+        ),
       )
+    ),
+
+    listTileTheme: const ListTileThemeData(
+      dense: true,
+      contentPadding: EdgeInsets.zero
+    ),
+
+    expansionTileTheme: ExpansionTileThemeData(
+      shape: const RoundedRectangleBorder(),
+      iconColor: Colors.black,
+      childrenPadding: EdgeInsets.only(left: Responsive(context).wp(10))
+    ),
+
+    switchTheme: SwitchThemeData(
+      thumbColor: MaterialStatePropertyAll(secondary.withOpacity(0.85)),
+      trackOutlineColor: MaterialStatePropertyAll(primary.withOpacity(0.75)),
+      trackColor: MaterialStatePropertyAll(primary.withOpacity(0.5)),
     ),
 
     dividerTheme: DividerThemeData(
       space: Responsive(context).hp(0.5),
       thickness: Responsive(context).hp(0.1),
       color: secondary
-    )
+    ),
+
+    cardTheme: CardTheme(
+      elevation: 0,
+      color: secondary.withOpacity(0.25),
+      surfaceTintColor: secondary,
+      shadowColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Responsive(context).ip(0.5)),
+      )
+    ),
+
+    searchBarTheme: SearchBarThemeData(
+      constraints: BoxConstraints.expand(width: double.infinity, height: Responsive(context).hp(4.5)),
+      backgroundColor: MaterialStatePropertyAll(Colors.grey.shade200),
+      elevation: const MaterialStatePropertyAll(0),
+      shape: MaterialStatePropertyAll(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Responsive(context).ip(1)),
+        ),
+      ),
+      hintStyle: const MaterialStatePropertyAll(TextStyle(color: Colors.black54))
+    ),
   );
 }

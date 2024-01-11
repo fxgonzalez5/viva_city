@@ -31,4 +31,6 @@ class CustomIcons {
   static const IconData coin = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData gear = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData document = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData share = IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData calendar = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
