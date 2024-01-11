@@ -44,6 +44,17 @@ class _Information extends StatelessWidget {
     final texts = Theme.of(context).textTheme;
     final profileProvider = context.read<ProfileProvider>();
     final textStyle = TextStyle(color: Colors.black54, fontSize: responsive.ip(1.5));
+    final expansionTileController1 = ExpansionTileController();
+    final expansionTileController2 = ExpansionTileController();
+    final expansionTileController3 = ExpansionTileController();
+    final expansionTileController4 = ExpansionTileController();
+
+    void collapseExpansionTiles() {
+      expansionTileController1.collapse();
+      expansionTileController2.collapse();
+      expansionTileController3.collapse();
+      expansionTileController4.collapse();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,16 +62,18 @@ class _Information extends StatelessWidget {
         Text('Configuración', style: texts.titleLarge),
         SizedBox(height: responsive.hp(1)),
         _CustomExpansionTile(
+          controller: expansionTileController1,
           index: 1,
           leadingIcon: Icons.badge_outlined,
           title: 'Datos personales',
           children: [
             _CustomListTile(title: 'Correo electrónico', subtitle: profileProvider.user!.email),
             _CustomListTile(title: 'Teléfono', subtitle: profileProvider.user!.phone),
-            _CustomListTile(title: 'Fecha de cumpleaños', subtitle: profileProvider.user!.birthdate),
+            _CustomListTile(title: 'Fecha de cumpleaños', subtitle: profileProvider.user!.birthdate?.timeZoneName),
           ],
         ),
         _CustomExpansionTile(
+          controller: expansionTileController2,
           index: 2,
           leadingIcon: Icons.interests_outlined,
           title: 'Intereses',
@@ -89,6 +102,7 @@ class _Information extends StatelessWidget {
           ],
         ),
         _CustomExpansionTile(
+          controller: expansionTileController3,
           index: 3,
           leadingIcon: Icons.notifications_outlined,
           title: 'Notificaciones',
@@ -110,7 +124,8 @@ class _Information extends StatelessWidget {
             ),
           ],
         ),
-        const _CustomExpansionTile(
+        _CustomExpansionTile(
+          controller: expansionTileController4,
           index: 4,
           leadingIcon: Icons.payments_outlined,
           title: 'Métodos de pago',
@@ -118,15 +133,21 @@ class _Information extends StatelessWidget {
             // TODO: Agregar los métodos de pago
           ],
         ),
-        SizedBox(height: responsive.hp(2)),
         Center(
-          child: ElevatedButton(
-            style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(colors.secondary)),
-            onPressed: () => context.pushNamed(EditProfileScreen.name), 
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
-              child: Text('Editar', style: TextStyle(fontSize: responsive.ip(1.4))),
-            )
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+            child: ElevatedButton(
+              style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(colors.secondary)),
+              onPressed: () {
+                context.pushNamed(EditProfileScreen.name); 
+                profileProvider.clearExpanded();
+                collapseExpansionTiles();
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
+                child: Text('Editar', style: TextStyle(fontSize: responsive.ip(1.4))),
+              )
+            ),
           ),
         )
       ],
@@ -171,13 +192,15 @@ class _CustomExpansionTile extends StatelessWidget {
   final IconData leadingIcon;
   final String title;
   final List<Widget> children;
+  final ExpansionTileController? controller;
 
 
   const _CustomExpansionTile({
     required this.index,
     required this.leadingIcon,
     required this.title,
-    required this.children
+    required this.children,
+    this.controller
   });
 
   @override
@@ -187,6 +210,7 @@ class _CustomExpansionTile extends StatelessWidget {
     final profileProvider = context.watch<ProfileProvider>();
 
     return ExpansionTile(
+      controller: controller,
       expandedAlignment: Alignment.centerLeft,
       leading: Icon(leadingIcon, size: responsive.ip(2.5)),
       title: Text(title, style: TextStyle(fontSize: responsive.ip(1.7))),
@@ -260,7 +284,7 @@ class _UserCard extends StatelessWidget {
     final responsive = Responsive(context);
     final texts = Theme.of(context).textTheme;
     final userProvider = context.read<ProfileProvider>();
-    final residence = userProvider.user!.city != null ? '${userProvider.user!.city}, ${userProvider.user!.province}, ${userProvider.user!.country}' : 'Residencia desconocida';
+    final residence = userProvider.user?.city != null ? '${userProvider.user!.city}, ${userProvider.user!.province}, ${userProvider.user!.country}' : 'Residencia desconocida';
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: responsive.hp(2.5), horizontal: responsive.wp(6)),

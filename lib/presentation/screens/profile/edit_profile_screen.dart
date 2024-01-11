@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
+import 'package:viva_city/config/helpers/helpers.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
@@ -34,15 +36,17 @@ class EditProfileScreen extends StatelessWidget {
                 decoration: _buildBoxDecoration(responsive),
                 child: const _ProfileForm(),
               ),
-              SizedBox(height: responsive.hp(2)),
               Center(
-                child: ElevatedButton(
-                  style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(colors.secondary)),
-                  onPressed: () => context.pushNamed(EditProfileScreen.name), 
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
-                    child: Text('Guardar', style: TextStyle(fontSize: responsive.ip(1.4))),
-                  )
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+                  child: ElevatedButton(
+                    style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(colors.secondary)),
+                    onPressed: () => context.pushNamed(EditProfileScreen.name), 
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
+                      child: Text('Guardar', style: TextStyle(fontSize: responsive.ip(1.4))),
+                    )
+                  ),
                 ),
               )
             ],
@@ -225,13 +229,15 @@ class _PersonalData extends StatelessWidget {
         SizedBox(height: responsive.hp(0.5)),
         _CustomTextFormField(
           label: 'Nombre de usuario',
-          initialValue: userProvider.user?.name,
+          initialValue: userProvider.user!.name,
           keyboardType: TextInputType.name,
           onChanged: (value) {
             // TODO: Almacenar el valor en una variable
           },
           validator: (value) {
-            // TODO: Validar el campo
+            return (value == null || value.isEmpty) 
+              ? 'Por favor ingrese su nombre'
+              : null;
           },
         ),
         _CustomTextFormField(
@@ -243,19 +249,33 @@ class _PersonalData extends StatelessWidget {
           label: 'Teléfono',
           initialValue: userProvider.user?.phone,
           keyboardType: TextInputType.phone,
-          onChanged: (value) {
+          onInputChanged: (value) {
             // TODO: Almacenar el valor en una variable
           },
+          onPhoneValidated: (value) => userProvider.isValidNumber = value!,
           validator: (value) {
-            // TODO: Validar el campo
+            if (value == null || value.isEmpty) {
+              return 'Por favor ingrese un número de teléfono';
+            } else if (!userProvider.isValidNumber) {
+              return 'Número de teléfono inválido';
+            }
+            
+            return null;
           },
         ),
         _CustomTextFormField(
           readOnly: true,
           label: 'Fecha de Nacimiento',
-          initialValue: userProvider.user?.birthdate,
-          onTap: () {
-            // TODO: Abrir el calendario para que seleccione la fecha
+          initialValue: userProvider.user?.birthdate?.timeZoneName,
+          onTap: () async {
+            DateTime? newDate = await showDatePicker(
+              context: context,
+              initialDate: userProvider.user?.birthdate ?? DateTime.now(),
+              firstDate: DateTime(1900),
+              lastDate: DateTime(2100),
+            );
+            
+            if (newDate == null) return;
           },
           onChanged: (value) {
             // TODO: Almacenar el valor seleccionado en el calendario
@@ -268,36 +288,55 @@ class _PersonalData extends StatelessWidget {
             // TODO: Almacenar el valor seleccionado en el calendario
           },
           validator: (value) {
-            // TODO: Validar el campo
+            return (value != null && value.length < 4)
+            ? 'No es un nombre de país'
+            : null;
           },
         ),
         _CustomTextFormField(
-          readOnly: true,
+          readOnly: userProvider.user?.country != null ? false : true,
           label: 'Estado o Provincia',
           initialValue: userProvider.user?.province,
           onChanged: (value) {
             // TODO: Almacenar el valor seleccionado en el calendario
           },
           validator: (value) {
-            // TODO: Validar el campo
+            if (value == null || value.isEmpty && (userProvider.user?.country != null || userProvider.user!.country!.isNotEmpty)) {
+              return 'Por favor ingrese su estado o provincia';
+            } else if (value.length < 4) {
+              return 'No es un nombre de estado o provincia';
+            }
+            
+            return null;
           },
           onTap: () {
-            // TODO: Mostrar un snackbar
+            if (userProvider.user?.country == null || userProvider.user!.country!.isEmpty) {
+              showSnackBar(context, 'Debe ingresar su país');
+            }
           },
         ),
         _CustomTextFormField(
-          readOnly: true,
+          readOnly: userProvider.user?.province != null ? false : true,
           label: 'Ciudad',
           initialValue: userProvider.user?.city,
           onChanged: (value) {
             // TODO: Almacenar el valor seleccionado en el calendario
           },
           validator: (value) {
-            // TODO: Validar el campo
+            if (value == null || value.isEmpty && (userProvider.user?.country != null || userProvider.user!.country!.isNotEmpty)) {
+              return 'Por favor ingrese su ciudad';
+            } else if (value.length < 4) {
+              return 'No es un nombre de ciudad';
+            }
+            
+            return null;
           },
           onTap: () {
-            // TODO: Mostrar un snackbar
-            print('object');
+            if (userProvider.user?.country == null || userProvider.user!.country!.isEmpty) {
+              showSnackBar(context, 'Debe ingresar su país');
+            } else {
+              showSnackBar(context, 'Debe ingresar su estado o provincia');
+            }
           },
         ),
       ],
@@ -315,6 +354,8 @@ class _CustomTextFormField extends StatelessWidget {
   final Function(String)? onChanged;
   final Function(String)? onFieldSubmitted;
   final VoidCallback? onTap;
+  final Function(bool?)? onPhoneValidated;
+  final Function(PhoneNumber)? onInputChanged;
 
   const _CustomTextFormField({
     this.prefix,
@@ -325,42 +366,70 @@ class _CustomTextFormField extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.onFieldSubmitted,
-    this.onTap
+    this.onTap,
+    this.onPhoneValidated,
+    this.onInputChanged
     });
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
+    final PhoneNumber number = PhoneNumber(isoCode: 'EC', phoneNumber: initialValue);
+    final style = TextStyle(color: Colors.black87, fontSize: responsive.ip(1.5));
+    final decoration = InputDecoration(
+      filled: false,
+      enabledBorder: const UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey)
+      ),
+      focusedBorder: const UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey)
+      ),
+      prefixIconConstraints: const BoxConstraints(maxHeight: double.maxFinite),
+      prefixIcon: prefix,
+      labelText: label,
+    );
 
     return Padding(
       padding: EdgeInsets.only(left: responsive.wp(10), bottom: responsive.hp(1.5)),
-      child: SizedBox(
-        child: TextFormField(
+      child: keyboardType != TextInputType.phone
+      ? TextFormField(
           initialValue: initialValue,
-          style: TextStyle(color: Colors.black87, fontSize: responsive.ip(1.5)),
+          style: style,
           autocorrect: false,
           readOnly: readOnly,
           keyboardType: keyboardType,
           textAlignVertical: TextAlignVertical.bottom,
           textCapitalization: keyboardType == TextInputType.name ? TextCapitalization.words : TextCapitalization.none,
-          decoration: InputDecoration(
-            filled: false,
-            enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey)
-            ),
-            focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey)
-            ),
-            prefixIconConstraints: const BoxConstraints(maxHeight: double.maxFinite),
-            prefixIcon: prefix,
-            labelText: label,
-          ),
+          decoration: decoration,
           validator: validator,
           onChanged: onChanged,
           onFieldSubmitted: onFieldSubmitted,
           onTap: onTap,
+        )
+      : InternationalPhoneNumberInput(
+          initialValue: number,
+          selectorConfig: const SelectorConfig(
+            selectorType: PhoneInputSelectorType.DIALOG,
+            useEmoji: true,
+            setSelectorButtonAsPrefixIcon: false,
+            leadingPadding: 15,
+            trailingSpace: false,
+            useBottomSheetSafeArea: true,
+          ),
+          textStyle: style,
+          selectorTextStyle: style,
+          hintText: label,
+          inputDecoration: decoration,
+          searchBoxDecoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: responsive.wp(3)),
+            fillColor: Colors.white,
+            hintText: 'Buscar por nombre de país',
+            hintStyle: TextStyle(color: Colors.black38, fontSize: responsive.ip(1.6)),
+          ),
+          onInputValidated: onPhoneValidated,
+          validator: validator,
+          onInputChanged: onInputChanged,
         ),
-      ),
     );
   }
 }

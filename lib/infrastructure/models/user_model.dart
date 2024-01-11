@@ -6,7 +6,7 @@ class UserModel {
   final String name;
   final String email;
   final String phone;
-  final String? birthdate;
+  final DateTime? birthdate;
   final String? city;
   final String? province;
   final String? country;
@@ -67,4 +67,34 @@ class UserModel {
     "promotionsNotification": promotionsNotification,
     "emailNotification": emailNotification, 
   };
+
+  UserModel copyWith({
+      String? id,
+      String? photoUrl,
+      String? name,
+      String? email,
+      String? phone,
+      DateTime? birthdate,
+      String? city,
+      String? province,
+      String? country,
+      List<String>? interests,
+      bool? eventNotification,
+      bool? promotionsNotification,
+      bool? emailNotification,
+    }) => UserModel(
+      id: id ?? this.id,
+      photoUrl: photoUrl ?? this.photoUrl,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      birthdate: birthdate ?? this.birthdate,
+      city: city ?? this.city,
+      province: province ?? this.province,
+      country: country ?? this.country,
+      interests: interests ?? this.interests,
+      eventNotification: eventNotification ?? this.eventNotification,
+      promotionsNotification: promotionsNotification ?? this.promotionsNotification,
+      emailNotification: emailNotification ?? this.emailNotification,
+    );
 }
