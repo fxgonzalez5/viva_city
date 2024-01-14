@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class CustomCircleAvatar extends StatelessWidget {
@@ -27,8 +29,8 @@ class CustomCircleAvatar extends StatelessWidget {
       decoration: BoxDecoration(
         image: imagePath != null
         ? imagePath!.startsWith('https:') 
-          ? DecorationImage(image: NetworkImage(imagePath!), fit: BoxFit.cover)
-          : DecorationImage(image: AssetImage(imagePath!), fit: BoxFit.cover)
+          ? DecorationImage(image: NetworkImage(imagePath!), fit: BoxFit.contain)
+          : DecorationImage(image: FileImage(File(imagePath!)), fit: BoxFit.cover)
         : const DecorationImage(image: AssetImage('assets/images/no_photo.png'), fit: BoxFit.cover),
         shape: BoxShape.circle,
         border: strokeWidth != null 

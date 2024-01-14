@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
@@ -34,20 +35,38 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class _Information extends StatelessWidget {
+class _Information extends StatefulWidget {
   const _Information();
+
+  @override
+  State<_Information> createState() => _InformationState();
+}
+
+class _InformationState extends State<_Information> {
+  late ExpansionTileController expansionTileController1;
+  late ExpansionTileController expansionTileController2;
+  late ExpansionTileController expansionTileController3;
+  late ExpansionTileController expansionTileController4;
+
+
+  @override
+  void initState() {
+    super.initState();
+    expansionTileController1 = ExpansionTileController();
+    expansionTileController2 = ExpansionTileController();
+    expansionTileController3 = ExpansionTileController();
+    expansionTileController4 = ExpansionTileController();
+  }
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
     final colors = Theme.of(context).colorScheme;
     final texts = Theme.of(context).textTheme;
-    final profileProvider = context.read<ProfileProvider>();
+    final profileProvider = context.watch<ProfileProvider>();
     final textStyle = TextStyle(color: Colors.black54, fontSize: responsive.ip(1.5));
-    final expansionTileController1 = ExpansionTileController();
-    final expansionTileController2 = ExpansionTileController();
-    final expansionTileController3 = ExpansionTileController();
-    final expansionTileController4 = ExpansionTileController();
+    final dateConversion = DateFormat('dd-MM-yyyy');
+    final date = profileProvider.user!.birthdate;
 
     void collapseExpansionTiles() {
       expansionTileController1.collapse();
@@ -69,7 +88,7 @@ class _Information extends StatelessWidget {
           children: [
             _CustomListTile(title: 'Correo electrónico', subtitle: profileProvider.user!.email),
             _CustomListTile(title: 'Teléfono', subtitle: profileProvider.user!.phone),
-            _CustomListTile(title: 'Fecha de cumpleaños', subtitle: profileProvider.user!.birthdate?.timeZoneName),
+            _CustomListTile(title: 'Fecha de cumpleaños', subtitle: date != null ? dateConversion.format(date) : ''),
           ],
         ),
         _CustomExpansionTile(
@@ -129,7 +148,7 @@ class _Information extends StatelessWidget {
           index: 4,
           leadingIcon: Icons.payments_outlined,
           title: 'Métodos de pago',
-          children: [
+          children: const [
             // TODO: Agregar los métodos de pago
           ],
         ),
@@ -139,6 +158,7 @@ class _Information extends StatelessWidget {
             child: ElevatedButton(
               style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(colors.secondary)),
               onPressed: () {
+                profileProvider.phone = profileProvider.user!.phone;
                 context.pushNamed(EditProfileScreen.name); 
                 profileProvider.clearExpanded();
                 collapseExpansionTiles();
@@ -283,7 +303,7 @@ class _UserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
     final texts = Theme.of(context).textTheme;
-    final userProvider = context.read<ProfileProvider>();
+    final userProvider = context.watch<ProfileProvider>();
     final residence = userProvider.user?.city != null ? '${userProvider.user!.city}, ${userProvider.user!.province}, ${userProvider.user!.country}' : 'Residencia desconocida';
 
     return Container(

@@ -1,12 +1,16 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:viva_city/infrastructure/models/models.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Stream<User?> authStatus() {
     return _auth.authStateChanges();
@@ -46,6 +50,33 @@ class FirebaseAuthService {
       debugPrint(e.toString());
     }
     return null;
+  }
+
+  Future<String?> uploadImage(File? image) async {
+    if (image == null) return null;
+
+    final user = await getUser();
+    final formattedName = user!.name.replaceAll(' ', '_');
+    final formated = DateFormat('yyyyMMdd_HHmmss');
+    final nameFile = '${formattedName}_${formated.format(DateTime.now())}';
+    final Reference ref = _storage.ref().child('Users').child(nameFile);
+    final UploadTask uploadTask = ref.putFile(image);
+    final TaskSnapshot snapshot = await uploadTask;
+
+    if (snapshot.state == TaskState.success) {
+      return await snapshot.ref.getDownloadURL();
+    } else {
+      return null;
+    }
+  }
+
+  Future<int?> updateUser(UserModel uploatedUser) async {
+    try {
+      await _firestore.collection('users').doc(uploatedUser.id).update(uploatedUser.toMap());
+      return 0;
+    } catch (e) {
+      return 1;
+    }
   }
 
   Future<int?> login(String email, String password) async {

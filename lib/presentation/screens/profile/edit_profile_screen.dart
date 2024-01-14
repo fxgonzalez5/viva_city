@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 import 'package:viva_city/config/helpers/helpers.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
+import 'package:viva_city/presentation/services/services.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 
@@ -18,38 +22,74 @@ class EditProfileScreen extends StatelessWidget {
     final responsive = Responsive(context);
     final colors = Theme.of(context).colorScheme;
     final texts = Theme.of(context).textTheme;
-
+    final userProvider = context.read<ProfileProvider>();
+    
     return Scaffold(
       appBar: AppBar(),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: responsive.wp(7.5)),
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
-                child: Text('Editar Perfil', style: texts.headlineSmall),
-              ),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(responsive.wp(5)),
-                decoration: _buildBoxDecoration(responsive),
-                child: const _ProfileForm(),
-              ),
-              Center(
-                child: Padding(
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          context.pop();
+          userProvider.newPictureFile = null;
+        },
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: responsive.wp(7.5)),
+          child: Center(
+            child: Column(
+              children: [
+                Padding(
                   padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
-                  child: ElevatedButton(
-                    style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(colors.secondary)),
-                    onPressed: () => context.pushNamed(EditProfileScreen.name), 
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
-                      child: Text('Guardar', style: TextStyle(fontSize: responsive.ip(1.4))),
-                    )
-                  ),
+                  child: Text('Editar Perfil', style: texts.headlineSmall),
                 ),
-              )
-            ],
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(responsive.wp(5)),
+                  decoration: _buildBoxDecoration(responsive),
+                  child: const _ProfileForm(),
+                ),
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: responsive.hp(2)),
+                    child: ElevatedButton(
+                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(colors.secondary)),
+                      onPressed: () async {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        final firebaseAuthService = FirebaseAuthService();
+                        final updatedUser = userProvider.user!.copyWith(
+                          photoUrl: await firebaseAuthService.uploadImage(userProvider.newPictureFile),
+                          name: userProvider.name,
+                          phone: userProvider.phone,
+                          birthdate: userProvider.birthdate,
+                          city: userProvider.city,
+                          province: userProvider.province,
+                          country: userProvider.country,
+                          interests: userProvider.interests,
+                          eventNotification: userProvider.eventNotification,
+                          promotionsNotification: userProvider.promotionsNotification,
+                          emailNotification: userProvider.emailNotification
+                        );
+        
+                        if (updatedUser.equals(userProvider.user!)) {
+                          Future.microtask(() => showSnackBar(context, 'No se ha realizado ninguna modificación'));
+                        } else if (userProvider.isValidForm()) {
+                          final errorMessage = await firebaseAuthService.updateUser(updatedUser);
+                          if (errorMessage == 0) {
+                            userProvider.user = await firebaseAuthService.getUser();
+                            Future.microtask(() => context.pop());
+                          } else {
+                            Future.microtask(() => showSnackBar(context, 'Error, no se pudo actualizar los datos'));
+                          }
+                        }
+                      }, 
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: responsive.wp(4)),
+                        child: Text('Guardar', style: TextStyle(fontSize: responsive.ip(1.4))),
+                      )
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -74,17 +114,20 @@ class _ProfileForm extends StatelessWidget {
     final userProvider = context.watch<ProfileProvider>();
 
     return Form(
+      key: userProvider.editFormKey,
       child: Column(
         children: [
           CustomCircleAvatar(
-            imagePath: userProvider.user?.photoUrl,
+            imagePath: userProvider.newPictureFile == null ? userProvider.user?.photoUrl : userProvider.newPictureFile!.path,
             radius: responsive.wp(25)
           ),
           CustomTextButton(
             text: 'Cambiar foto',
             color: colors.secondary,
-            onPressed: () {
-              // TODO: Abrir la galeria y guardar la foto que elija en la bd
+            onPressed: () async {
+              final image = await userProvider.getImage();
+              if (image == null) return;
+              await userProvider.cropImage(File(image.path));
             }
           ),
           const _PersonalData(),
@@ -125,24 +168,18 @@ class _Notifications extends StatelessWidget {
             children: [
               SwitchListTile(
                 title: Text('Deseo recibir notificaciones sobre nuevos eventos', style: textStyle),
-                value: userProvider.user?.eventNotification ?? false,
-                onChanged: (value) {
-                  // TODO: Guardar el cambio del switch
-                }
+                value: userProvider.eventNotification,
+                onChanged: (value) => userProvider.eventNotification = value,
               ),
               SwitchListTile(
                 title: Text('Deseo recibir notificaciones sobre promociones', style: textStyle),
-                value: userProvider.user?.promotionsNotification ?? false,
-                onChanged: (value) {
-                  // TODO: Guardar el cambio del switch
-                }
+                value: userProvider.promotionsNotification,
+                onChanged: (value) => userProvider.promotionsNotification = value,
               ),
               SwitchListTile(
                 title: Text('Deseo recibir notificaciones vía correo electrónico', style: textStyle),
-                value: userProvider.user?.emailNotification ?? false,
-                onChanged: (value) {
-                  // TODO: Guardar el cambio del switch
-                }
+                value: userProvider.emailNotification,
+                onChanged: (value) => userProvider.emailNotification = value,
               ),
             ],
           ),
@@ -174,7 +211,7 @@ class _Interests extends StatelessWidget {
           padding: EdgeInsets.only(left: responsive.wp(10)),
           child: Wrap(
             alignment: WrapAlignment.center,
-            children: userProvider.user?.interests.map(
+            children: userProvider.interests.map(
               (interest) => Card(
                 color: Colors.grey.shade400,
                 child: Padding(
@@ -186,23 +223,24 @@ class _Interests extends StatelessWidget {
                       IconButton(
                         visualDensity: VisualDensity.comfortable,
                         icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          // TODO: Quitar de la lista
-                        }, 
+                        onPressed: () => userProvider.removeInterest(interest), 
                       )
                     ],
                   ),
                 ),
               ),
             ).toList()
-            ??
-            []
           ),
         ),
          _CustomTextFormField(
+          controller: userProvider.interestController,
+          focusNode: userProvider.focusInterest,
           prefix: Text('Añadir: ', style: TextStyle(color: colors.secondary, fontSize: responsive.ip(1.4)),), 
           onFieldSubmitted: (value) {
-            // TODO: Agregar a la lista de intereses
+            if (userProvider.interestController.text.trim().isEmpty) return;
+            userProvider.interestController.clear();
+            userProvider.addInterest(value);
+            FocusScope.of(context).requestFocus(userProvider.focusInterest);
           },
         ),
       ],
@@ -229,11 +267,9 @@ class _PersonalData extends StatelessWidget {
         SizedBox(height: responsive.hp(0.5)),
         _CustomTextFormField(
           label: 'Nombre de usuario',
-          initialValue: userProvider.user!.name,
+          initialValue: userProvider.user?.name,
           keyboardType: TextInputType.name,
-          onChanged: (value) {
-            // TODO: Almacenar el valor en una variable
-          },
+          onChanged: (value) => userProvider.name = value.trim(),
           validator: (value) {
             return (value == null || value.isEmpty) 
               ? 'Por favor ingrese su nombre'
@@ -247,15 +283,20 @@ class _PersonalData extends StatelessWidget {
         ),
         _CustomTextFormField(
           label: 'Teléfono',
-          initialValue: userProvider.user?.phone,
+          initialValue: userProvider.phone,
           keyboardType: TextInputType.phone,
-          onInputChanged: (value) {
-            // TODO: Almacenar el valor en una variable
+          onInputChanged: (phone) {
+            final prefix = phone.dialCode;
+              String number = phone.parseNumber();
+              if (phone.parseNumber().startsWith('0')){
+                number = phone.parseNumber().substring(1);
+              }
+              userProvider.phone = '$prefix$number';
           },
           onPhoneValidated: (value) => userProvider.isValidNumber = value!,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Por favor ingrese un número de teléfono';
+              return 'Por favor ingrese su teléfono';
             } else if (!userProvider.isValidNumber) {
               return 'Número de teléfono inválido';
             }
@@ -264,9 +305,9 @@ class _PersonalData extends StatelessWidget {
           },
         ),
         _CustomTextFormField(
+          controller: userProvider.birthdateController,
           readOnly: true,
           label: 'Fecha de Nacimiento',
-          initialValue: userProvider.user?.birthdate?.timeZoneName,
           onTap: () async {
             DateTime? newDate = await showDatePicker(
               context: context,
@@ -276,65 +317,72 @@ class _PersonalData extends StatelessWidget {
             );
             
             if (newDate == null) return;
-          },
-          onChanged: (value) {
-            // TODO: Almacenar el valor seleccionado en el calendario
+            userProvider.birthdate = newDate;
+            final dateConversion = DateFormat('dd-MM-yyyy');
+            userProvider.birthdateController.text = dateConversion.format(newDate);
           },
         ),
         _CustomTextFormField(
           label: 'País',
           initialValue: userProvider.user?.country,
-          onChanged: (value) {
-            // TODO: Almacenar el valor seleccionado en el calendario
-          },
+          onChanged: (value) => userProvider.country = value.trim(),
           validator: (value) {
-            return (value != null && value.length < 4)
-            ? 'No es un nombre de país'
-            : null;
+            if (value == null || value.isEmpty) return null;
+
+            if (value.trim().isEmpty && userProvider.country != null){
+              return 'No pueden ser espacios en blanco';
+            } else if (value.isNotEmpty && value.trim().length < 4){
+              return 'No es un nombre de país';
+            }
+            return null;
           },
         ),
         _CustomTextFormField(
-          readOnly: userProvider.user?.country != null ? false : true,
+          readOnly: userProvider.country == null ? true : false,
           label: 'Estado o Provincia',
           initialValue: userProvider.user?.province,
-          onChanged: (value) {
-            // TODO: Almacenar el valor seleccionado en el calendario
-          },
+          onChanged: (value) => userProvider.province = value.trim(),
           validator: (value) {
-            if (value == null || value.isEmpty && (userProvider.user?.country != null || userProvider.user!.country!.isNotEmpty)) {
-              return 'Por favor ingrese su estado o provincia';
-            } else if (value.length < 4) {
-              return 'No es un nombre de estado o provincia';
-            }
+            if (userProvider.country != null && userProvider.country!.isNotEmpty && userProvider.country!.length > 3) {
+              if (value!.isEmpty) {
+                return 'Por favor ingrese su estado o provincia';
+              } else if (value.trim().isEmpty && userProvider.province != null) {
+                return 'No pueden ser espacios en blanco';
+              } else if (value.isNotEmpty && value.trim().length < 4) {
+                return 'No es un nombre de estado o provincia';
+              }  
+            } 
             
             return null;
           },
           onTap: () {
-            if (userProvider.user?.country == null || userProvider.user!.country!.isEmpty) {
+            if (userProvider.country == null) {
               showSnackBar(context, 'Debe ingresar su país');
             }
           },
         ),
         _CustomTextFormField(
-          readOnly: userProvider.user?.province != null ? false : true,
+          readOnly: userProvider.province == null ? true : false,
           label: 'Ciudad',
           initialValue: userProvider.user?.city,
-          onChanged: (value) {
-            // TODO: Almacenar el valor seleccionado en el calendario
-          },
+          onChanged: (value) => userProvider.city = value.trim(),
           validator: (value) {
-            if (value == null || value.isEmpty && (userProvider.user?.country != null || userProvider.user!.country!.isNotEmpty)) {
-              return 'Por favor ingrese su ciudad';
-            } else if (value.length < 4) {
-              return 'No es un nombre de ciudad';
-            }
+            if (userProvider.province != null && userProvider.province!.isNotEmpty && userProvider.province!.length > 3) {
+              if (value!.isEmpty) {
+                return 'Por favor ingrese su ciudad';
+              } else if (value.trim().isEmpty && userProvider.province != null) {
+                return 'No pueden ser espacios en blanco';
+              } else if (value.isNotEmpty && value.trim().length < 4) {
+                return 'No es un nombre de ciudad';
+              }  
+            } 
             
             return null;
           },
           onTap: () {
-            if (userProvider.user?.country == null || userProvider.user!.country!.isEmpty) {
+            if (userProvider.country == null) {
               showSnackBar(context, 'Debe ingresar su país');
-            } else {
+            } else if (userProvider.province == null) {
               showSnackBar(context, 'Debe ingresar su estado o provincia');
             }
           },
@@ -347,9 +395,11 @@ class _PersonalData extends StatelessWidget {
 class _CustomTextFormField extends StatelessWidget {
   final Widget? prefix;
   final String? label;
+  final TextEditingController? controller;
   final String? initialValue;
   final bool readOnly;
   final TextInputType? keyboardType;
+  final FocusNode? focusNode;
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
   final Function(String)? onFieldSubmitted;
@@ -360,9 +410,11 @@ class _CustomTextFormField extends StatelessWidget {
   const _CustomTextFormField({
     this.prefix,
     this.label,
+    this.controller,
     this.initialValue,
     this.readOnly = false,
     this.keyboardType,
+    this.focusNode,
     this.validator,
     this.onChanged,
     this.onFieldSubmitted,
@@ -374,6 +426,8 @@ class _CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
+    final colors = Theme.of(context).colorScheme;
+    
     final PhoneNumber number = PhoneNumber(isoCode: 'EC', phoneNumber: initialValue);
     final style = TextStyle(color: Colors.black87, fontSize: responsive.ip(1.5));
     final decoration = InputDecoration(
@@ -384,20 +438,29 @@ class _CustomTextFormField extends StatelessWidget {
       focusedBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: Colors.grey)
       ),
+      errorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: colors.primary, width: 2)
+      ),
+      focusedErrorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: colors.primary)
+      ),
       prefixIconConstraints: const BoxConstraints(maxHeight: double.maxFinite),
       prefixIcon: prefix,
       labelText: label,
+      errorStyle: TextStyle(color: colors.primary)
     );
 
     return Padding(
       padding: EdgeInsets.only(left: responsive.wp(10), bottom: responsive.hp(1.5)),
       child: keyboardType != TextInputType.phone
       ? TextFormField(
+          controller: controller,
           initialValue: initialValue,
           style: style,
           autocorrect: false,
           readOnly: readOnly,
           keyboardType: keyboardType,
+          focusNode: focusNode,
           textAlignVertical: TextAlignVertical.bottom,
           textCapitalization: keyboardType == TextInputType.name ? TextCapitalization.words : TextCapitalization.none,
           decoration: decoration,
