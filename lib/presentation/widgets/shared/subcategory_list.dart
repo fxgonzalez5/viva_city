@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:viva_city/config/theme/responsive.dart';
-import 'package:viva_city/presentation/screens/screens.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class SubcategoryList extends StatelessWidget {
   final List<dynamic> items;
-  final String? category;
+  final String? route;
 
   const SubcategoryList({
     super.key,
     required this.items, 
-    this.category
+    this.route
   });
 
   @override
@@ -21,27 +20,15 @@ class SubcategoryList extends StatelessWidget {
     return Expanded(
       child: ListView.separated(
         itemCount: items.length, 
-        itemBuilder: (context, index) => SubcategoryItem(
-          image: items[index].image,
-          title: items[index].title,
-          type: items[index].type,
-          location: items[index].location,
-          distance: items[index].distance,
-          description: items[index].description,
-          onTap: () {
-            switch (category) {
-              case 'Eventos':
-                 context.pushNamed(DescriptionCategoryEventos.name, extra:  {'title': items[index].title});
-                break;
-              case 'Lugares':
-                 context.pushNamed(DescriptionCategoryLugares.name, extra:  {'title': items[index].title});
-                break;
-              case 'Hospedaje':
-                 context.pushNamed(DescriptionCategoryHoteles.name, extra:  {'title': items[index].title});
-                break;
-              default:
-            }
-          }
+        itemBuilder: (context, index) => _SubcategoryItem(
+          image: items[index].portada,
+          title: items[index].titulo,
+          labels: items[index].getAttribute() is List<String> ? items[index].getAttribute() : null,
+          score: items[index].getAttribute() is double ? items[index].getAttribute() : 0,
+          hasRating: items[index].getAttribute() is List<String> ? false : true,
+          location: items[index].ubicacion,
+          description: items[index].descripcion,
+          onTap: () => context.push(route!, extra: items[index]),
         ),
         separatorBuilder: (context, index) => LineDivider(
           color: Colors.grey,
@@ -54,25 +41,26 @@ class SubcategoryList extends StatelessWidget {
 }
 
 
-class SubcategoryItem extends StatelessWidget {
+class _SubcategoryItem extends StatelessWidget {
   final String image;
   final String title;
-  final String type;
+  final List<String>? labels;
+  final bool hasRating;
+  final double score;
   final String location;
-  final String distance;
   final String description;
   final VoidCallback? onTap;
 
-  const SubcategoryItem({
-    super.key, 
+  const _SubcategoryItem({
     required this.image,
     required this.title,
-    required this.type,
+    this.labels,
+    this.hasRating = true,
+    this.score = 0,
     required this.location,
-    required this.distance,
     required this.description,
     this.onTap
-  });
+  }): assert(hasRating ? score >= 0 : labels != null);
 
 
 
@@ -91,8 +79,16 @@ class SubcategoryItem extends StatelessWidget {
             Container(
               width: responsive.wp(33),
               height: responsive.hp(13),
+              alignment: Alignment.topRight,
               decoration: BoxDecoration(
                 image: DecorationImage(image: NetworkImage(image), fit: BoxFit.cover)
+              ),
+              child: FavoriteButton(
+                icon: Icons.favorite_border,
+                iconColor: Colors.grey.shade400,
+                onPressed: () {
+                  // TODO: Asignar el evento a la lista de favoritos del usuario
+                },
               ),
             ),
             SizedBox(width: responsive.wp(5)),
@@ -102,13 +98,28 @@ class SubcategoryItem extends StatelessWidget {
                 children: [
                   Text(title),
                   SizedBox(height: responsive.hp(0.5)),
-                  Row(
-                    children: [
-                      Text(type, style: texts.bodySmall!.copyWith(color: colors.secondary)),
-                      Flexible(child: Text(' | $location', style: texts.bodySmall!.copyWith(color: Colors.grey), overflow: TextOverflow.ellipsis)),
-                    ],
-                  ),
-                  Text(distance, style: texts.bodySmall!.copyWith(color: Colors.grey)),
+                  if (hasRating)
+                    CustomRatingBar(
+                      size: responsive.ip(1.5),
+                      rating: score
+                    )
+                  else
+                    SizedBox(
+                      height: responsive.hp(2),
+                      child: ListView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        children: List.generate(
+                          labels!.length,
+                          (index) => CustomLabel(
+                            text: labels![index],
+                            style: texts.bodySmall!.copyWith(color: colors.secondary),
+                          ),
+                        ),
+                      ),
+                    ),
+                  SizedBox(height: responsive.hp(0.5)),
+                  Text(location, style: texts.bodySmall!.copyWith(color: Colors.grey)),
                   SizedBox(height: responsive.hp(0.5)),
                   Text(description, style: texts.bodySmall, maxLines: 3, overflow: TextOverflow.ellipsis),
                 ],

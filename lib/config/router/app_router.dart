@@ -67,21 +67,21 @@ final appRouter = GoRouter(
 
     
     GoRoute(
-      path: '/events',
-      name: DescriptionCategoryEventos.name,
-      builder: (context, state) => const DescriptionCategoryEventos(),
+      path: '/event',
+      name: EventScreen.name,
+      builder: (context, state) => const EventScreen(),
     ),
     
     GoRoute(
       path: '/place',
-      name: DescriptionCategoryLugares.name,
-      builder: (context, state) => const DescriptionCategoryLugares(),
+      name: PlaceScreen.name,
+      builder: (context, state) => const PlaceScreen(),
     ),
 
     GoRoute(
-      path: '/hotel',
-      name: DescriptionCategoryHoteles.name,
-      builder: (context, state) => const DescriptionCategoryHoteles(),
+      path: '/lodging',
+      name: LodgingScreen.name,
+      builder: (context, state) => const LodgingScreen(),
     ),
 
     GoRoute(

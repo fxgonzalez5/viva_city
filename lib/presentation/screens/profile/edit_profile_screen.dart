@@ -56,7 +56,7 @@ class EditProfileScreen extends StatelessWidget {
                         FocusScope.of(context).requestFocus(FocusNode());
                         final firebaseAuthService = FirebaseAuthService();
                         final updatedUser = userProvider.user!.copyWith(
-                          photoUrl: await firebaseAuthService.uploadImage(userProvider.newPictureFile),
+                          photo: await firebaseAuthService.uploadImage(userProvider.newPictureFile),
                           name: userProvider.name,
                           phone: userProvider.phone,
                           birthdate: userProvider.birthdate,
@@ -118,7 +118,7 @@ class _ProfileForm extends StatelessWidget {
       child: Column(
         children: [
           CustomCircleAvatar(
-            imagePath: userProvider.newPictureFile == null ? userProvider.user?.photoUrl : userProvider.newPictureFile!.path,
+            imagePath: userProvider.newPictureFile == null ? userProvider.user?.photo : userProvider.newPictureFile!.path,
             radius: responsive.wp(25)
           ),
           CustomTextButton(

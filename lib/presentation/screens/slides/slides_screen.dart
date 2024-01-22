@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'package:viva_city/config/menu/slider_items.dart';
-import 'package:viva_city/config/preferences/user_preferences.dart';
+import 'package:viva_city/config/preferences/app_preferences.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/screens/screens.dart';
@@ -35,7 +35,7 @@ class SlidesScreen extends StatelessWidget {
             } else {
               context.pushReplacementNamed(LoginScreen.name);
               await Future.delayed(const Duration(milliseconds: 1500));
-              UserPreferences.firstTime = false;
+              AppPreferences.firstTime = false;
             }
           },
         )

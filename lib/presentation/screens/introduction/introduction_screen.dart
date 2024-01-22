@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
-import 'package:viva_city/presentation/widgets/line_divider.dart';
+import 'package:viva_city/presentation/widgets/shared/line_divider.dart';
 
 class IntroductionScreen extends StatelessWidget {
   static const String name = 'introduction_screen';

@@ -4,10 +4,10 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:viva_city/config/theme/app_theme.dart';
-import 'package:viva_city/infrastructure/models/models.dart';
+import 'package:viva_city/domain/entities/user_entity.dart';
 
 class ProfileProvider extends ChangeNotifier {
-  UserModel? user;
+  UserEntity? user;
   List<int> expanded = [];
   GlobalKey<FormState> editFormKey = GlobalKey<FormState>();
   String? photoUrl;
@@ -27,6 +27,7 @@ class ProfileProvider extends ChangeNotifier {
   late bool _promotionsNotification = user!.promotionsNotification;
   late bool _emailNotification = user!.emailNotification;
   bool _isValidNumber = false;
+  List<dynamic> favorites = [];
 
   void addExpanded(int value) {
     expanded.add(value);

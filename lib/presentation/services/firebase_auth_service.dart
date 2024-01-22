@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:viva_city/domain/entities/entities.dart';
+import 'package:viva_city/infrastructure/mappers/mappers.dart';
 
 import 'package:viva_city/infrastructure/models/models.dart';
 
@@ -16,9 +18,9 @@ class FirebaseAuthService {
     return _auth.authStateChanges();
   }
 
-  Future<UserModel?> getUser() async {
+  Future<UserEntity?> getUser() async {
     DocumentSnapshot snapshot = await _firestore.collection('users').doc(_auth.currentUser?.uid).get();
-    return UserModel.fromMap(snapshot.data() as Map<String, dynamic>);
+    return UserDBMapper.userDBToEntity(UserDB.fromMap(snapshot.data() as Map<String, dynamic>));
   }
 
   Future<int?> createAccount(String name, String email, String password, String phone,) async {
@@ -28,11 +30,13 @@ class FirebaseAuthService {
         password: password,
       );
 
-      final data = UserModel(
-        id: credential.user!.uid,
-        name: name,
-        email: email,
-        phone: phone
+      final data = UserDBMapper.userEntityToModel(
+        UserEntity(
+          id: credential.user!.uid,
+          name: name,
+          email: email,
+          phone: phone
+        )
       );
 
       await _firestore.collection('users').doc(credential.user!.uid).set(data.toMap());
@@ -70,9 +74,10 @@ class FirebaseAuthService {
     }
   }
 
-  Future<int?> updateUser(UserModel uploatedUser) async {
+  Future<int?> updateUser(UserEntity uploatedUser) async {
     try {
-      await _firestore.collection('users').doc(uploatedUser.id).update(uploatedUser.toMap());
+      final data = UserDBMapper.userEntityToModel(uploatedUser);
+      await _firestore.collection('users').doc(uploatedUser.id).update(data.toMap());
       return 0;
     } catch (e) {
       return 1;

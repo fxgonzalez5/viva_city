@@ -24,18 +24,16 @@ class HomeScreen extends StatelessWidget {
           child: ListView.builder(
             itemCount: categoryItems.length,
             itemBuilder: (BuildContext context, int index) {
-              final capitalizeTitle = categoryItems[index].category.substring(0,1) + categoryItems[index].category.substring(1).toLowerCase();
-              final subCategory = List.generate(3, (i) => 'https://picsum.photos/id/${(i + 25) * (index + 1)}/1000');
+              final images = List.generate(3, (i) => 'https://picsum.photos/id/${(i + 25) * (index + 1)}/1000');
 
               return CategoryCard(
-                category: categoryItems[index].category,
+                category: categoryItems[index].name,
                 imageUrl: categoryItems[index].image,
                 onTap: () => context.pushNamed(
                   CategoryScreen.name, 
                   extra: {
-                    'title': categoryItems[index].title,
-                    'titleAppBar': capitalizeTitle,
-                    'subCategory': subCategory,
+                    'index': index,
+                    'images': images,
                   },
                 ),
               );

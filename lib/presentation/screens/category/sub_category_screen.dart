@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:viva_city/config/menu/list_items.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
@@ -14,13 +13,13 @@ class SubCategoryScreen extends StatelessWidget {
     final data = GoRouterState.of(context).extra! as Map<String, dynamic>;
     final responsive = Responsive(context);
     
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(title: Text(data["titleAppBar"])),
-        body: Column(
+    return Scaffold(
+      appBar: AppBar(title: Text(data["titleAppBar"])),
+      body: DefaultTabController(
+        length: 2,
+        child: Column(
           children: [
-            TabBar.secondary(
+            TabBar(
               indicatorSize: TabBarIndicatorSize.tab,
               unselectedLabelColor: Colors.grey,
               tabs: [
@@ -28,10 +27,10 @@ class SubCategoryScreen extends StatelessWidget {
                 Tab(icon: Icon(Icons.map_outlined, size: responsive.ip(3)))
               ],
             ),
-             Expanded(
+            Expanded(
               child: TabBarView(
                 children: [
-                  SubcategoryList(items: listItems, category: data['category'],),
+                  SubcategoryList(items: data['items'], route: data['route'],),
                   const Center(child: Text('Mapa')), // TODO: Construir la pantalla del mapa
                 ],
               ),

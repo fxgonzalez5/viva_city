@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserPreferences {
+class AppPreferences {
   static late SharedPreferences _prefs;
 
   static bool _fisrtTime = true;
@@ -14,5 +14,4 @@ class UserPreferences {
     _fisrtTime = value;
     _prefs.setBool('firstTime', value);
   }
-
 }

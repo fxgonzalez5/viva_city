@@ -227,6 +227,7 @@ class _LoginForm extends StatelessWidget {
           SizedBox(height: responsive.hp(5)),
           CustomElevatedButton(
             text: "INGRESAR",
+            fontSize: responsive.ip(1.7),
             onPressed: loginProvider.isLoading ? null : () async {
               FocusScope.of(context).requestFocus(FocusNode());
 
@@ -254,6 +255,7 @@ class _LoginForm extends StatelessWidget {
                     break;
                   default:
                     context.read<ProfileProvider>().user = await firebaseAuthService.getUser();
+                    Future.microtask(() async => await context.read<CategoryProvider>().loadData());
                     Future.microtask(() => context.pushReplacementNamed(NavegationScreen.name));
                     loginProvider.isLoading = false;
                     loginProvider.errorEmail = null;

@@ -218,6 +218,7 @@ class _SignupForm extends StatelessWidget {
 
           CustomElevatedButton(
             text: "CREAR CUENTA",
+            fontSize: responsive.ip(1.7),
             onPressed: signupProvider.isLoading ? null : () async {
               FocusScope.of(context).requestFocus(FocusNode());
 
@@ -240,6 +241,7 @@ class _SignupForm extends StatelessWidget {
                     break;
                   default:
                     context.read<ProfileProvider>().user = await firebaseAuthService.getUser();
+                    Future.microtask(() async => await context.read<CategoryProvider>().loadData());
                     Future.microtask(() => context.pushReplacementNamed(SlidingScreen.name));
                     signupProvider.isLoading = false;
                     signupProvider.errorEmail = null;

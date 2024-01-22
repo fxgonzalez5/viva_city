@@ -168,7 +168,7 @@ class _CustomDrawerHeader extends StatelessWidget {
         LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {  
             return CustomCircleAvatar(
-              imagePath: profileProvider.user!.photoUrl,
+              imagePath: profileProvider.user!.photo,
               radius: constraints.maxHeight,
               margin: EdgeInsets.symmetric(vertical: responsive.hp(0.5), horizontal: responsive.wp(3.5)),
               strokeColor: Colors.white,

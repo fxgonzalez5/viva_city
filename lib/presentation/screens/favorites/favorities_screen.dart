@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:viva_city/config/menu/list_items.dart';
 import 'package:viva_city/config/theme/custom_icons.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
@@ -16,6 +15,7 @@ class FavoritesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
     final texts = Theme.of(context).textTheme;
+    final profileProvider = context.watch<ProfileProvider>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +36,9 @@ class FavoritesScreen extends StatelessWidget {
         ),
         const RecommendationList(items: [],),
         const _AgendaHeader(),
-        const SubcategoryList(items: listItems)
+        (profileProvider.favorites.isEmpty)
+        ? const Expanded(child: Center(child: Text('No tiene ningún favorito', style: TextStyle(color: Colors.grey))))
+        : const SubcategoryList(items: [])
       ],
     );
   }
@@ -97,7 +99,7 @@ class _Head extends StatelessWidget {
           Text('Hola, $name', style: texts.headlineSmall),
           const Spacer(),
           CustomCircleAvatar(
-            imagePath: profileProvider.user!.photoUrl,
+            imagePath: profileProvider.user!.photo,
             radius: responsive.wp(10),
           ),
         ],

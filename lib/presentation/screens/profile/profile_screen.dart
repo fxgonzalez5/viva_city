@@ -315,7 +315,7 @@ class _UserCard extends StatelessWidget {
       child: Row(
         children: [
           CustomCircleAvatar(
-            imagePath: userProvider.user!.photoUrl,
+            imagePath: userProvider.user!.photo,
             radius: responsive.wp(22.5)
           ),
           SizedBox(width: responsive.wp(6)),
