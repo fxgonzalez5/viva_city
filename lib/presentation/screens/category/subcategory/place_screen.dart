@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:viva_city/config/theme/responsive.dart';
+import 'package:viva_city/domain/entities/place.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class PlaceScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class PlaceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = GoRouterState.of(context).extra! as Map<dynamic, dynamic>;
+    final place = GoRouterState.of(context).extra! as Place;
     final texts = Theme.of(context).textTheme;
     final responsive = Responsive(context);
     final colors = Theme.of(context).colorScheme;
@@ -17,11 +18,12 @@ class PlaceScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          CustomSliverAppBar(imageUrl: data['image']),
+          CustomSliverAppBar(imageUrl: place.portada),
           SubcategoryHeader(
-            title: data["title"],
+            title: place.titulo,
+            score: place.calificacion,
           ),
-          const _Body(),
+           _Body(place),
           const _Buttons(),
           SliverList.list(
             children: [
@@ -78,9 +80,8 @@ class _Buttons extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({
-    super.key,
-  });
+  final Place place;
+  const _Body(this.place);
 
   @override
   Widget build(BuildContext context) {
@@ -88,21 +89,19 @@ class _Body extends StatelessWidget {
     final responsive = Responsive(context);
     final colors = Theme.of(context).colorScheme;
 
-    const description = 'Nulla enim duis qui laborum occaecat duis laborum consequat nisi labore laborum officia. Voluptate aliquip laboris non enim velit veniam duis incididunt. Veniam et id et commodo anim. Duis magna ipsum qui nostrud voluptate ipsum consequat nulla id consequat officia consectetur.';
-
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: responsive.wp(7)),
       sliver: SliverToBoxAdapter(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(description, style: texts.bodyLarge),
+            Text(place.descripcion, style: texts.bodyLarge),
             SizedBox(height: responsive.hp(3)), 
             Text('Horarios de visita', style: texts.bodyLarge!.copyWith(color: colors.primary)), 
-            Text('Lunes: 06:00 am a 18:00 pm\nMartes: 06:00 am a 18:00 pm', style: texts.bodyLarge),
+            ...List.generate(place.horarios.length,(index)=>Text(place.horarios[index], style: texts.bodyLarge)),            
             SizedBox(height: responsive.hp(2)), 
             Text('Cómo llegar', style: texts.bodyLarge!.copyWith(color: colors.primary)),
-            Text('Fugiat magna amet nulla qui nostrud veniam id est deserunt nisi dolore.',style: texts.bodyLarge),
+            Text(place.ubicacion,style: texts.bodyLarge),
           ],
         ),
       ),

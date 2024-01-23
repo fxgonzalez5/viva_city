@@ -31,15 +31,15 @@ const List<CategoryItem> categoryItems = [
     title: 'Próximos eventos',
     subcategories: [
       SubcategoryItem(
-        image: 'assets/images/subcategory_event1.png',
+        image: 'assets/images/subcategory_event1.jpg',
         name: 'TEATRO',
       ),
       SubcategoryItem(
-        image: 'assets/images/subcategory_event2.png',
+        image: 'assets/images/subcategory_event2.jpg',
         name: 'CAMINATAS',
       ),
       SubcategoryItem(
-        image: 'assets/images/subcategory_event3.png',
+        image: 'assets/images/subcategory_event3.jpg',
         name: 'PRESENTACIONES',
       ),
     ],
@@ -52,15 +52,15 @@ const List<CategoryItem> categoryItems = [
     title: 'Lugares destacados',
     subcategories: [
       SubcategoryItem(
-        image: 'assets/images/subcategory_place1.png',
+        image: 'assets/images/subcategory_place1.jpg',
         name: 'MUSEOS',
       ),
       SubcategoryItem(
-        image: 'assets/images/subcategory_place2.png',
+        image: 'assets/images/subcategory_place2.jpg',
         name: 'PARQUES/PLAZAS',
       ),
       SubcategoryItem(
-        image: 'assets/images/subcategory_place3.png',
+        image: 'assets/images/subcategory_place3.jpg',
         name: 'IGLESIAS',
       ),
     ],
@@ -73,15 +73,15 @@ const List<CategoryItem> categoryItems = [
     title: 'Recomendados para ti',
     subcategories: [
       SubcategoryItem(
-        image: 'assets/images/subcategory_lodging1.png',
+        image: 'assets/images/subcategory_lodging1.jpg',
         name: 'HOTELES',
       ),
       SubcategoryItem(
-        image: 'assets/images/subcategory_lodging2.png',
+        image: 'assets/images/subcategory_lodging2.jpg',
         name: 'HOSTALES',
       ),
       SubcategoryItem(
-        image: 'assets/images/subcategory_lodging3.png',
+        image: 'assets/images/subcategory_lodging3.jpg',
         name: 'HOSTERIAS',
       ),
     ],

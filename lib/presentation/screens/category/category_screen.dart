@@ -16,12 +16,12 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = GoRouterState.of(context).extra! as Map<String, dynamic>;
+    final index = GoRouterState.of(context).extra! as int;// as int, renombrar dara a index
     final categoryProvider = context.watch<CategoryProvider>();
     final responsive = Responsive(context);
     final texts = Theme.of(context).textTheme;
 
-    final categoryItem = categoryItems[data['index']];
+    final categoryItem = categoryItems[index];//dentro de categoryItems mandar index
 
     return Scaffold(
       appBar: AppBar(
@@ -41,7 +41,7 @@ class CategoryScreen extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return CategoryCard(
                   category: categoryItem.subcategories[index].name,
-                  imageUrl: data['images'][index],
+                  imageUrl: categoryItem.subcategories[index].image,
                   onTap: () => context.pushNamed(
                     SubCategoryScreen.name,
                     extra:  {

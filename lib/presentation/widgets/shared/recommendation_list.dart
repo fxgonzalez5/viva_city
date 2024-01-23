@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:viva_city/config/menu/recomendation_items.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
@@ -19,15 +20,16 @@ class RecommendationList extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(vertical: responsive.hp(1), horizontal: responsive.wp(5),),
-        itemCount: 5,
-        itemBuilder: (context, index) => const RecommendationCard()
+        itemCount: recommendationsItems.length,
+        itemBuilder: (context, index) =>  RecommendationCard(item:recommendationsItems[index])
       ),
     );
   }
 }
 
 class RecommendationCard extends StatelessWidget {
-  const RecommendationCard({super.key});
+  final RecomendationItems item;
+  const RecommendationCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +63,7 @@ class RecommendationCard extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 height: responsive.wp(23),
-                child: Image.network('https://via.placeholder.com/500', fit: BoxFit.cover),
+                child: Image.network(item.image, fit: BoxFit.cover),
               ),
               FavoriteButton(
                 icon: Icons.favorite_border,
@@ -73,8 +75,8 @@ class RecommendationCard extends StatelessWidget {
             ],
           ),
           SizedBox(height: responsive.hp(1)),
-          Text('Exposición Fotográfica', style: TextStyle(color: colors.primary), overflow: TextOverflow.ellipsis),
-          Text('310 m', style: texts.bodySmall!.copyWith(color: Colors.grey))
+          Text(item.lugar, style: TextStyle(color: colors.primary), overflow: TextOverflow.ellipsis),
+          Text(item.distancia, style: texts.bodySmall!.copyWith(color: Colors.grey))
         ],
       ),
     );

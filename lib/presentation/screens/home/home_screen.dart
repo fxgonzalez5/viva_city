@@ -24,6 +24,7 @@ class HomeScreen extends StatelessWidget {
           child: ListView.builder(
             itemCount: categoryItems.length,
             itemBuilder: (BuildContext context, int index) {
+              //eliminar, enviar en extras solo indx
               final images = List.generate(3, (i) => 'https://picsum.photos/id/${(i + 25) * (index + 1)}/1000');
 
               return CategoryCard(
@@ -31,10 +32,7 @@ class HomeScreen extends StatelessWidget {
                 imageUrl: categoryItems[index].image,
                 onTap: () => context.pushNamed(
                   CategoryScreen.name, 
-                  extra: {
-                    'index': index,
-                    'images': images,
-                  },
+                  extra: index
                 ),
               );
             },
@@ -53,21 +51,23 @@ class _CustomCarouselSlider extends StatelessWidget {
     final homeProvider = context.watch<HomeProvider>();
     final responsive = Responsive(context);
     final colors = Theme.of(context).colorScheme;
+    final images = ['https://i0.wp.com/www.nlarenas.com/wp-content/uploads/guia-loja-villonaco-vilcabamba-puyango-bosque-cisne-23.jpg?fit=1200%2C772&ssl=1',
+    'https://img.goraymi.com/2019/12/05/fa3a20825ae6dc6e53f07383200014bb_xl.jpg','https://i.pinimg.com/550x/cf/0a/72/cf0a7262eb2a3b5a1f4efc6af07215c6.jpg',
+    'https://www.notyouraverageamerican.es/wp-content/uploads/2016/11/Loja-1-grande.jpg', 'https://hazteverecuador.com/wp-content/uploads/2016/11/independenciadeloja-18noviembre1820.webp'];
 
-    final images = List.generate(5,
-      (index) => FadeInImage(
-        fit: BoxFit.cover,
-        width: double.infinity, 
-        placeholder: const AssetImage('assets/images/loading.gif'),
-        image: NetworkImage('https://picsum.photos/id/${(index + 1) * 100}/1000'),
-      )
-    );
 
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
         CarouselSlider(
-          items: images,
+          items: List.generate(images.length,
+      (index) => FadeInImage(
+        fit: BoxFit.cover,
+        width: double.infinity, 
+        placeholder: const AssetImage('assets/images/loading.gif'),
+        image: NetworkImage(images[index]),
+      )
+    ),
           options: CarouselOptions(
             height: responsive.hp(35),
             viewportFraction: 1,

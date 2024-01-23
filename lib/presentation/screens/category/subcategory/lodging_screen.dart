@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:viva_city/config/theme/responsive.dart';
+import 'package:viva_city/domain/entities/entities.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class LodgingScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class LodgingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = GoRouterState.of(context).extra! as Map<dynamic, dynamic>;
+    final lodging = GoRouterState.of(context).extra! as Lodging;
     final texts = Theme.of(context).textTheme;
     final responsive = Responsive(context);
     final colors = Theme.of(context).colorScheme;
@@ -17,11 +18,12 @@ class LodgingScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          CustomSliverAppBar(imageUrl: data['image'],),
+          CustomSliverAppBar(imageUrl: lodging.portada,),
           SubcategoryHeader(
-            title: data["title"],
+            title: lodging.titulo,
+            score: lodging.calificacion,
           ),
-          const _Body(),
+           _Body(lodging),
           const _Buttons(),
           SliverList.list(
             children: [
@@ -78,9 +80,8 @@ class _Buttons extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({
-    super.key,
-  });
+  final Lodging lodging;
+  const _Body(this.lodging);
 
   @override
   Widget build(BuildContext context) {
@@ -88,22 +89,20 @@ class _Body extends StatelessWidget {
     final responsive = Responsive(context);
     final colors = Theme.of(context).colorScheme;
 
-    const description = 'Nulla enim duis qui laborum occaecat duis laborum consequat nisi labore laborum officia. Voluptate aliquip laboris non enim velit veniam duis incididunt. Veniam et id et commodo anim. Duis magna ipsum qui nostrud voluptate ipsum consequat nulla id consequat officia consectetur.';
-
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: responsive.wp(7)),
       sliver: SliverToBoxAdapter(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const _Data(),
+            _Data(lodging),
             SizedBox(height: responsive.hp(3)),
-            Text(description, style: texts.bodyLarge),
+            Text(lodging.descripcion, style: texts.bodyLarge),
             SizedBox(height: responsive.hp(3)),
             Text('Servicios / Facilidades', style: texts.bodyLarge!.copyWith(color: colors.primary)),
-            Text('Commodo exercitation tempor sunt aliquip non occaecat. Quis voluptate aliqua velit excepteur fugiat sint esse consequat proident. Dolor amet et tempor dolore aliqua excepteur velit quis.',style: texts.bodyLarge), 
+            Text(lodging.servicios,style: texts.bodyLarge), 
             SizedBox(height: responsive.hp(2)),
-            _Gallery(List.generate(6, (index) => 'https://picsum.photos/id/${(index+5 * 7) }/1000'))
+            _Gallery(lodging.imagenes)
           ],
         ),
       ),
@@ -131,9 +130,8 @@ class _Gallery extends StatelessWidget {
 }
 
 class _Data extends StatelessWidget {
-  const _Data({
-    super.key,
-  });
+  final Lodging lodging;
+  const _Data(this.lodging);
 
   @override
   Widget build(BuildContext context) {
@@ -143,13 +141,13 @@ class _Data extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Ubicación: Centro Histórico', style: texts.bodyLarge!.copyWith(color: colors.primary)),
-        Text('Aeropuerto: 45 minutos (Catamayo)', style: texts.bodyLarge!.copyWith(color: colors.primary),),
-        Text('Dirección: Colón y 18 de Noviembre', style: texts.bodyLarge!.copyWith(color: colors.primary)),
-        Text('Teléfono: (593 7) 258 3500', style: texts.bodyLarge!.copyWith(color: colors.primary)),
-        Text('Celular: (593 7) 258 3500', style: texts.bodyLarge!.copyWith(color: colors.primary)),
-        Text('E-mail: reservas@hotelcarrionloja.com', style: texts.bodyLarge!.copyWith(color: colors.primary)),
-        Text('Web: www.hotelcarrionloja.com', style: texts.bodyLarge!.copyWith(color: colors.primary)),
+        Text('Ubicación: ${lodging.ubicacion}', style: texts.bodyLarge!.copyWith(color: colors.primary)),
+        Text('Aeropuerto: ${lodging.aeropuerto}', style: texts.bodyLarge!.copyWith(color: colors.primary),),
+        Text('Dirección: ${lodging.direccion}', style: texts.bodyLarge!.copyWith(color: colors.primary)),
+        Text('Teléfono: ${lodging.telefono}', style: texts.bodyLarge!.copyWith(color: colors.primary)),
+        Text('Celular: ${lodging.celular}', style: texts.bodyLarge!.copyWith(color: colors.primary)),
+        Text('E-mail: ${lodging.correo}', style: texts.bodyLarge!.copyWith(color: colors.primary)),
+        Text('Web: ${lodging.web}', style: texts.bodyLarge!.copyWith(color: colors.primary)),
       ],
     );
   }
