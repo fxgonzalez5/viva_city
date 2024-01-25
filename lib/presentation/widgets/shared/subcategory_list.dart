@@ -1,67 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:viva_city/config/theme/responsive.dart';
+import 'package:viva_city/presentation/providers/category_provider.dart';
+import 'package:viva_city/presentation/providers/profile_provider.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class SubcategoryList extends StatelessWidget {
   final List<dynamic> items;
+  final bool isFavorites;
   final String? route;
 
   const SubcategoryList({
     super.key,
-    required this.items, 
-    this.route
+    required this.items,
+    this.isFavorites = false,
+    this.route,
   });
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
 
-    return Expanded(
-      child: ListView.separated(
-        itemCount: items.length, 
-        itemBuilder: (context, index) => _SubcategoryItem(
-          image: items[index].portada,
-          title: items[index].titulo,
-          labels: items[index].getAttribute() is List<String> ? items[index].getAttribute() : null,
-          score: items[index].getAttribute() is double ? items[index].getAttribute() : 0,
-          hasRating: items[index].getAttribute() is List<String> ? false : true,
-          location: items[index].ubicacion,
-          description: items[index].descripcion,
-          onTap: () => context.push(route!, extra: items[index]),
-        ),
-        separatorBuilder: (context, index) => LineDivider(
-          color: Colors.grey,
-          height: 0.25,
-          width: responsive.wp(93),
-        ),
+    return ListView.separated(
+      itemCount: items.length, 
+      itemBuilder: (context, index) => _SubcategoryItem(
+        object: items[index],
+        isFavorites: isFavorites,
+        onTap: () {
+          context.read<CategoryProvider>().currentObject = items[index];
+          context.push(route!, extra: items[index]);
+        }
+      ),
+      separatorBuilder: (context, index) => LineDivider(
+        color: Colors.grey,
+        height: 0.25,
+        width: responsive.wp(93),
       ),
     );
   }
 }
 
-
 class _SubcategoryItem extends StatelessWidget {
-  final String image;
-  final String title;
-  final List<String>? labels;
-  final bool hasRating;
-  final double score;
-  final String location;
-  final String description;
+  final dynamic object;
+  final bool isFavorites;
   final VoidCallback? onTap;
 
   const _SubcategoryItem({
-    required this.image,
-    required this.title,
-    this.labels,
-    this.hasRating = true,
-    this.score = 0,
-    required this.location,
-    required this.description,
+    required this.object,
+    required this.isFavorites,
     this.onTap
-  }): assert(hasRating ? score >= 0 : labels != null);
-
+  });
 
 
   @override
@@ -81,13 +70,19 @@ class _SubcategoryItem extends StatelessWidget {
               height: responsive.hp(13),
               alignment: Alignment.topRight,
               decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(image), fit: BoxFit.cover)
+                image: DecorationImage(image: NetworkImage(object.portada), fit: BoxFit.cover)
               ),
               child: FavoriteButton(
-                icon: Icons.favorite_border,
-                iconColor: Colors.grey.shade400,
+                icon: (object.isFavorite) ? Icons.favorite : Icons.favorite_border,
+                iconColor: (object.isFavorite) ? Colors.red : Colors.grey.shade400,
                 onPressed: () {
-                  // TODO: Asignar el evento a la lista de favoritos del usuario
+                  if (object.isFavorite) {
+                    context.read<ProfileProvider>().removeFavorites(object);
+                  } else {
+                    context.read<ProfileProvider>().addFavorites(object);
+                  }
+                  object.isFavorite = !object.isFavorite;
+                  if (!isFavorites) context.read<CategoryProvider>().updateItemByCategory(2, object);
                 },
               ),
             ),
@@ -96,12 +91,12 @@ class _SubcategoryItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title),
+                  Text(object.titulo),
                   SizedBox(height: responsive.hp(0.5)),
-                  if (hasRating)
+                  if (object.getAttribute() is List<String> ? false : true)
                     CustomRatingBar(
                       size: responsive.ip(1.5),
-                      rating: score
+                      rating: object.getAttribute(),
                     )
                   else
                     SizedBox(
@@ -110,18 +105,18 @@ class _SubcategoryItem extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         children: List.generate(
-                          labels!.length,
+                          object.getAttribute().length,
                           (index) => CustomLabel(
-                            text: labels![index],
+                            text: object.getAttribute()[index],
                             style: texts.bodySmall!.copyWith(color: colors.secondary),
                           ),
                         ),
                       ),
                     ),
                   SizedBox(height: responsive.hp(0.5)),
-                  Text(location, style: texts.bodySmall!.copyWith(color: Colors.grey)),
+                  Text(object.ubicacion, style: texts.bodySmall!.copyWith(color: Colors.grey)),
                   SizedBox(height: responsive.hp(0.5)),
-                  Text(description, style: texts.bodySmall, maxLines: 3, overflow: TextOverflow.ellipsis),
+                  Text(object.descripcion, style: texts.bodySmall, maxLines: 3, overflow: TextOverflow.ellipsis),
                 ],
               ),
             ),

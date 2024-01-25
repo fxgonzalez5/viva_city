@@ -115,4 +115,14 @@ class ProfileProvider extends ChangeNotifier {
     _emailNotification = value;
     notifyListeners();
   }
+
+  void addFavorites(dynamic value) {
+    favorites.add(value);
+    notifyListeners();
+  }
+
+  void removeFavorites(dynamic value) {
+    favorites.remove(value);
+    notifyListeners();
+  }
 }

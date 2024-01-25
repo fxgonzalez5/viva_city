@@ -1,26 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:viva_city/config/theme/responsive.dart';
+import 'package:viva_city/presentation/providers/providers.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
-  final String imageUrl;
 
-  const CustomSliverAppBar({super.key, required this.imageUrl});
+  const CustomSliverAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive(context);
+    final object = context.watch<CategoryProvider>().currentObject;
 
     return SliverAppBar(
       pinned: true,
       expandedHeight: responsive.hp(35),
       flexibleSpace: FlexibleSpaceBar(
-        background: Image.network(imageUrl, fit: BoxFit.cover,),
+        background: Image.network(object.portada, fit: BoxFit.cover,),
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.favorite_border),
+          icon: Icon((object.isFavorite) ? Icons.favorite : Icons.favorite_border),
+          color: (object.isFavorite) ? Colors.red : Colors.white,
           onPressed: () {
-            // TODO: Agregar a favoritos y cambiar el color
+            if (object.isFavorite) {
+              context.read<ProfileProvider>().favorites.remove(object);
+            } else {
+              context.read<ProfileProvider>().favorites.add(object);
+            }
+            object.isFavorite = !object.isFavorite;
+            context.read<CategoryProvider>().currentObject = object;
           }
         ),
         IconButton(

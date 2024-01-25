@@ -12,7 +12,7 @@ class Place implements Attributable {
   final double latitud;
   final double longitud;
   final String tipo;
-  final bool isFavorite;
+  bool isFavorite;
 
   Place({
     required this.id,

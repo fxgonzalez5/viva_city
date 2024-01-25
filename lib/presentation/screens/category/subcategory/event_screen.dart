@@ -20,7 +20,7 @@ class EventScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          CustomSliverAppBar(imageUrl: event.portada),
+          const CustomSliverAppBar(),
           SubcategoryHeader(
             title: event.titulo,
             hasRating: false,

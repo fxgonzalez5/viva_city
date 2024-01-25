@@ -18,7 +18,7 @@ class Lodging implements Attributable {
   final double latitud;
   final double longitud;
   final String tipo;
-  final bool isFavorite;
+  bool isFavorite;
 
   Lodging({
     required this.id,

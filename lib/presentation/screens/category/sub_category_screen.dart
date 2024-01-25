@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import 'package:viva_city/config/theme/responsive.dart';
+import 'package:viva_city/presentation/providers/providers.dart';
+import 'package:viva_city/presentation/screens/screens.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class SubCategoryScreen extends StatelessWidget {
@@ -11,6 +14,7 @@ class SubCategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = GoRouterState.of(context).extra! as Map<String, dynamic>;
+    final categoryProvider = context.watch<CategoryProvider>();
     final responsive = Responsive(context);
     
     return Scaffold(
@@ -30,8 +34,15 @@ class SubCategoryScreen extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  SubcategoryList(items: data['items'], route: data['route'],),
-                  const Center(child: Text('Mapa')), // TODO: Construir la pantalla del mapa
+                  SubcategoryList(items: categoryProvider.itemsSubcategory, route: data['route'],),
+                  LoadingScreen(
+                    data: [
+                      {
+                        'items': categoryProvider.itemsSubcategory,
+                        'icon': 'assets/icons${data['route']}.png',
+                      },
+                    ],
+                  ),
                 ],
               ),
             ),

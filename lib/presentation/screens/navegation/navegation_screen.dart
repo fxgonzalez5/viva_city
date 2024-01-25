@@ -20,8 +20,10 @@ class NavegationScreen extends StatelessWidget {
     final firebaseAuthService = FirebaseAuthService();
     final navegationProvider = context.read<NavegationProvider>();
     final profileProvider = context.read<ProfileProvider>();
+    final categoryProvider = context.watch<CategoryProvider>();
 
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         actions: [
           IconButton(
@@ -39,12 +41,27 @@ class NavegationScreen extends StatelessWidget {
       body: PageView(
         controller: navegationProvider.pageController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          HomeScreen(),
-          SizedBox(),
-          Center(child: Text('Mapa')),
-          FavoritesScreen(),
-          ProfileScreen()
+        children: [
+          const HomeScreen(),
+          const SizedBox(),
+          LoadingScreen(
+            data: [
+              {
+                'items': categoryProvider.events,
+                'icon': 'assets/icons/event.png',
+              },
+              {
+                'items': categoryProvider.places,
+                'icon': 'assets/icons/place.png',
+              },
+              {
+                'items': categoryProvider.lodging,
+                'icon': 'assets/icons/lodging.png',
+              },
+            ]
+          ),
+          const FavoritesScreen(),
+          const ProfileScreen()
         ],
       ),
       bottomNavigationBar: const _CustomNavigationBar(),
@@ -76,7 +93,7 @@ class _CustomNavigationBar extends StatelessWidget {
         items: navegationItems,
         onTap: (int value) {
           if (navegationProvider.currentPage == 4 && value != 4) profileProvider.clearExpanded(); 
-          if (value != 1) navegationProvider.currentPage =  value;
+          if (value != 1) navegationProvider.currentPage = value;
         },
       ),
     );

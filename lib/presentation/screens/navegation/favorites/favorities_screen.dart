@@ -38,7 +38,7 @@ class FavoritesScreen extends StatelessWidget {
         const _AgendaHeader(),
         (profileProvider.favorites.isEmpty)
         ? const Expanded(child: Center(child: Text('No tiene ningún favorito', style: TextStyle(color: Colors.grey))))
-        : const SubcategoryList(items: [])
+        : Expanded(child: SubcategoryList(items: profileProvider.favorites, isFavorites: true,))
       ],
     );
   }

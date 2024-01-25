@@ -64,7 +64,6 @@ final appRouter = GoRouter(
       name: SubCategoryScreen.name,
       builder: (context, state) => const SubCategoryScreen(),
     ),
-
     
     GoRoute(
       path: '/event',
@@ -82,6 +81,24 @@ final appRouter = GoRouter(
       path: '/lodging',
       name: LodgingScreen.name,
       builder: (context, state) => const LodgingScreen(),
+    ),
+
+    GoRoute(
+      path: '/loading',
+      name: LoadingScreen.name,
+      builder: (context, state) => const LoadingScreen(),
+    ),
+
+    GoRoute(
+      path: '/map',
+      name: MapScreen.name,
+      builder: (context, state) => const MapScreen(),
+    ),
+
+    GoRoute(
+      path: '/gps_access',
+      name: GpsAccessScreen.name,
+      builder: (context, state) => const GpsAccessScreen(),
     ),
 
     GoRoute(

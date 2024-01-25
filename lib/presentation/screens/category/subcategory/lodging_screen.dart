@@ -18,7 +18,7 @@ class LodgingScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          CustomSliverAppBar(imageUrl: lodging.portada,),
+          const CustomSliverAppBar(),
           SubcategoryHeader(
             title: lodging.titulo,
             score: lodging.calificacion,

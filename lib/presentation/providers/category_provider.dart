@@ -10,6 +10,10 @@ class CategoryProvider extends ChangeNotifier {
   List<Event> events = [];
   List<Place> places = [];
   List<Lodging> lodging = [];
+  List<dynamic> onDisplayData = [];
+  List<dynamic> itemsSubcategory = [];
+
+  dynamic _currentObject;
 
   CategoryProvider({required this.tourismRepository});
 
@@ -26,8 +30,8 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<dynamic> getOnDisplayData(String category) {
-    final onDisplayData = [];
+  void getOnDisplayData(String category) {
+    onDisplayData.clear();
     final Set<String> types = {};
 
     switch (category) {
@@ -63,26 +67,43 @@ class CategoryProvider extends ChangeNotifier {
         break;
       default:
     }
-
-    return onDisplayData;
   }
 
-  List<dynamic> getItemsBySubcategory({required String category, required String subcategory}) {
-    final items = [];
+  void getItemsBySubcategory({required String category, required String subcategory}) {
+    itemsSubcategory.clear();
 
     switch (category) {
       case 'Eventos':
-        items.addAll(events.where((element) => element.tipo == subcategory));
+        itemsSubcategory.addAll(events.where((element) => element.tipo == subcategory));
         break;
       case 'Lugares':
-        items.addAll(places.where((element) => element.tipo == subcategory));
+        itemsSubcategory.addAll(places.where((element) => element.tipo == subcategory));
         break;
       case 'Hospedaje':
-        items.addAll(lodging.where((element) => element.tipo == subcategory));
+        itemsSubcategory.addAll(lodging.where((element) => element.tipo == subcategory));
         break;
       default:
     }
+  }
 
-    return items;
+  void updateItemByCategory(int list, dynamic object){
+    switch (list) {
+      case 1:
+        final index = onDisplayData.indexWhere((element) => element.id == object.id);
+        onDisplayData[index] = object;
+        break;
+      case 2:
+        final index = itemsSubcategory.indexWhere((element) => element.id == object.id);
+        itemsSubcategory[index] = object;
+        break;
+      default:
+    }
+    notifyListeners();
+  }
+
+  dynamic get currentObject => _currentObject;
+  set currentObject(dynamic value) {
+    _currentObject = value;
+    notifyListeners();
   }
 }

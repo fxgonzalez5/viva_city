@@ -17,7 +17,7 @@ class Event implements Attributable {
   final double latitud;
   final double longitud;
   final String tipo;
-  final bool isFavorite;
+  bool isFavorite;
 
   Event({
     required this.id,

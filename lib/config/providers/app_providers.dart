@@ -15,4 +15,5 @@ final List<SingleChildWidget> providerList = [
   ChangeNotifierProvider(create: (_) => NavegationProvider()),
   ChangeNotifierProvider(create: (_) => HomeProvider()),
   ChangeNotifierProvider(create: (_) => CategoryProvider(tourismRepository: tourismRepository), lazy: false),
+  ChangeNotifierProvider(create: (_) => MapProvider(), lazy: false),
 ];

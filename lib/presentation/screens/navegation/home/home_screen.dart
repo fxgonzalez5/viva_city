@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'package:viva_city/config/helpers/helpers.dart';
 import 'package:viva_city/config/menu/category_items.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
@@ -24,16 +25,13 @@ class HomeScreen extends StatelessWidget {
           child: ListView.builder(
             itemCount: categoryItems.length,
             itemBuilder: (BuildContext context, int index) {
-              //eliminar, enviar en extras solo indx
-              final images = List.generate(3, (i) => 'https://picsum.photos/id/${(i + 25) * (index + 1)}/1000');
-
               return CategoryCard(
                 category: categoryItems[index].name,
                 imageUrl: categoryItems[index].image,
-                onTap: () => context.pushNamed(
-                  CategoryScreen.name, 
-                  extra: index
-                ),
+                onTap: () {
+                  context.read<CategoryProvider>().getOnDisplayData(TextFormat.capitalize(categoryItems[index].name));
+                  context.pushNamed(CategoryScreen.name, extra: index);
+                },
               );
             },
           ),
