@@ -1,10 +1,13 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:viva_city/infrastructure/datasources/django_datasource.dart';
+import 'package:viva_city/infrastructure/datasources/google_datasource.dart';
+import 'package:viva_city/infrastructure/repositories/route_repository_impl.dart';
 import 'package:viva_city/infrastructure/repositories/tourism_repository_impl.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
 
 final tourismRepository = TourismRepositoryImpl(DjangoDatasource());
+final routeRepository = RouteRepositoryImpl(GoogleDatasource());
 
 final List<SingleChildWidget> providerList = [
   ChangeNotifierProvider(create: (_) => SlidesProvider()),
@@ -15,5 +18,5 @@ final List<SingleChildWidget> providerList = [
   ChangeNotifierProvider(create: (_) => NavegationProvider()),
   ChangeNotifierProvider(create: (_) => HomeProvider()),
   ChangeNotifierProvider(create: (_) => CategoryProvider(tourismRepository: tourismRepository), lazy: false),
-  ChangeNotifierProvider(create: (_) => MapProvider(), lazy: false),
+  ChangeNotifierProvider(create: (_) => MapProvider(routeRepository: routeRepository), lazy: false),
 ];

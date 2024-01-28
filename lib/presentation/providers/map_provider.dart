@@ -6,15 +6,22 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:viva_city/config/helpers/helpers.dart';
+import 'package:viva_city/domain/entities/entities.dart';
+import 'package:viva_city/domain/repositories/route_repository.dart';
 
 class MapProvider extends ChangeNotifier {
   StreamSubscription? gpsServiceSubscription;
   bool isGpsEnabled = false;
   bool isGpsPermissionGranted = false;
+  final RouteRepository routeRepository;
+  GoogleMapController? mapController;
   Set<Marker> markers = {};
-  bool isNotEmpty = false;
+  Set<Polyline> polylines = {};
+  LatLng? _startPosition;
+  LatLng? endPosition;
+  Directions? _directions;
 
-  MapProvider() {
+  MapProvider({required this.routeRepository}) {
     _init();
   }
 
@@ -63,7 +70,19 @@ class MapProvider extends ChangeNotifier {
 
   Future<LatLng?> getCurrentPosition() async {
     final position = await Geolocator.getCurrentPosition();
-    return LatLng(position.latitude, position.longitude);
+    _startPosition = LatLng(position.latitude, position.longitude);
+    return _startPosition;
+  }
+
+  Directions? get directions => _directions;
+  set directions(Directions? value) {
+    _directions = value;
+    notifyListeners();
+  }
+
+  void moveCamera() {
+    final cameraUpdate = CameraUpdate.newLatLng(_startPosition!);
+    mapController?.animateCamera(cameraUpdate);
   }
 
   Future<void> addMarker(String title, String location, LatLng position, String path) async {
@@ -79,8 +98,28 @@ class MapProvider extends ChangeNotifier {
           title: title,
           snippet: location,
         ),
+        onTap: () => endPosition = position,
       )
     );
+    notifyListeners();
+  }
+
+  Future<void> drawRoute(Color color) async {
+    polylines.clear();
+    directions = await routeRepository.getDirections(origin: _startPosition!, destination: endPosition!);
+    final points = directions!.polylinePoints.map((point) => LatLng(point.latitude, point.longitude)).toList();
+    points.add(endPosition!);
+
+    polylines.add(
+      Polyline(
+        polylineId: const PolylineId('route'),
+        color: color,
+        width: 5,
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap,
+        points: points,
+      )
+    ); 
     notifyListeners();
   }
 }

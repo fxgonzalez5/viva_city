@@ -33,6 +33,7 @@ class SubCategoryScreen extends StatelessWidget {
             ),
             Expanded(
               child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
                   SubcategoryList(items: categoryProvider.itemsSubcategory, route: data['route'],),
                   LoadingScreen(
