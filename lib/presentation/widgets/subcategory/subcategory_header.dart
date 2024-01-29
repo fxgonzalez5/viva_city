@@ -29,8 +29,7 @@ class SubcategoryHeader extends StatelessWidget {
         delegate: SliverChildListDelegate([
           Row(
             children: [
-              Text(title, style: texts.headlineSmall),
-              const Spacer(),
+              Expanded(child: Text(title, style: texts.headlineSmall)),
               IconButton(
                 highlightColor: Colors.grey[200],
                 icon: Icon(CustomIcons.share, color: colors.secondary, size: responsive.ip(2),),
@@ -40,7 +39,7 @@ class SubcategoryHeader extends StatelessWidget {
               )
             ],
           ),
-    
+          SizedBox(height: responsive.hp(1.5)),
           if (hasRating)
             CustomRatingBar(rating: score)
           else
