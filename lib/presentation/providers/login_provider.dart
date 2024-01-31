@@ -2,17 +2,12 @@ import 'package:flutter/material.dart';
 
 class LoginProvider extends ChangeNotifier {
   final scrollController = ScrollController();
-  GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   String email = '';
   String? _errorEmail;
   String password = '';
   String? _errorPassword;
   bool _isVisible = false;
   bool _isLoading = false;
-
-  bool isValidForm() {
-    return loginFormKey.currentState?.validate() ?? false;
-  }
 
   String? get errorEmail => _errorEmail;
   set errorEmail(String? value) {

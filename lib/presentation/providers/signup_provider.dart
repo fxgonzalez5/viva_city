@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class SignupProvider extends ChangeNotifier {
   final scrollController = ScrollController();
-  GlobalKey<FormState> singupFormKey = GlobalKey<FormState>();
   String name = '';
   String email = '';
   String? _errorEmail;
@@ -13,10 +12,6 @@ class SignupProvider extends ChangeNotifier {
   bool _isVisibleTwo = false;
   bool _isValidNumber = false;
   bool _isLoading = false;
-
-  bool isValidForm() {
-    return singupFormKey.currentState?.validate() ?? false;
-  }
 
   String? get errorEmail => _errorEmail;
   set errorEmail(String? value) {

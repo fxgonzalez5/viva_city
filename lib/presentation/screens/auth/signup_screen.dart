@@ -89,17 +89,31 @@ class _NavegationText extends StatelessWidget {
   }
 }
 
-class _SignupForm extends StatelessWidget {
+class _SignupForm extends StatefulWidget {
   const _SignupForm();
 
   @override
+  State<_SignupForm> createState() => _SignupFormState();
+}
+
+class _SignupFormState extends State<_SignupForm> {
+  late final GlobalKey<FormState> singupFormKey;
+
+  @override
+  void initState() {
+    super.initState();
+    singupFormKey = GlobalKey<FormState>();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final singupFormKey = GlobalKey<FormState>();
     final responsive = Responsive(context);
     final firebaseAuthService = FirebaseAuthService();
     final signupProvider = context.read<SignupProvider>();
 
     return Form(
-      key: signupProvider.singupFormKey,
+      key: singupFormKey,
       child: Column(
         children: [
           CustomTextFormField(
@@ -222,7 +236,7 @@ class _SignupForm extends StatelessWidget {
             onPressed: signupProvider.isLoading ? null : () async {
               FocusScope.of(context).requestFocus(FocusNode());
 
-              if (signupProvider.isValidForm()) {
+              if (singupFormKey.currentState!.validate()) {
                 signupProvider.isLoading = true;
 
                 final errorMessage = await firebaseAuthService.createAccount(signupProvider.name.trim(), signupProvider.email.trim(), signupProvider.password.trim(), signupProvider.phone.trim(),);

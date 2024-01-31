@@ -98,10 +98,12 @@ class MapProvider extends ChangeNotifier {
           title: title,
           snippet: location,
         ),
-        onTap: () => endPosition = position,
+        onTap: () {
+          endPosition = position;
+          notifyListeners();
+        }
       )
     );
-    notifyListeners();
   }
 
   Future<void> drawRoute(Color color) async {

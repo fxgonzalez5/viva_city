@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:viva_city/config/theme/responsive.dart';
@@ -11,12 +12,14 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isActivated = GoRouterState.of(context).extra is Map<String, dynamic> ? false : true;
     final navegationProvider = context.read<NavegationProvider>();
     final mapProvider = context.watch<MapProvider>();
     final responsive = Responsive(context);
     final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
+      appBar: isActivated ? AppBar(title: const Text('Mapa')) : null,
       extendBody: true,
       body: FutureBuilder(
         future: mapProvider.getCurrentPosition(),
@@ -77,6 +80,7 @@ class _BtnToggleUserRoute extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return FloatingActionButton(
+      heroTag: null,
       backgroundColor: colors.primary,
       foregroundColor: Colors.white,
       onPressed: mapProvider.endPosition == null 
@@ -107,6 +111,7 @@ class _BtnLocation extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return FloatingActionButton(
+      heroTag: null,
       backgroundColor: colors.primary,
       foregroundColor: Colors.white,
       onPressed: mapProvider.moveCamera,

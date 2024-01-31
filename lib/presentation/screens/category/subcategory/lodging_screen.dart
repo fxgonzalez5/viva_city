@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/domain/entities/entities.dart';
+import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class LodgingScreen extends StatelessWidget {
@@ -14,6 +17,8 @@ class LodgingScreen extends StatelessWidget {
     final texts = Theme.of(context).textTheme;
     final responsive = Responsive(context);
     final colors = Theme.of(context).colorScheme;
+    final mapProvider = context.read<MapProvider>();
+    mapProvider.addMarker(lodging.titulo, lodging.ubicacion , LatLng(lodging.latitud, lodging.longitud), 'assets/icons/lodging.png');
 
     return Scaffold(
       body: CustomScrollView(
@@ -124,7 +129,14 @@ class _Gallery extends StatelessWidget {
       runSpacing: responsive.wp(2),
       children: List.generate(
         images.length,
-        (index) => Image.network(images[index], width: responsive.wp(27), height: responsive.hp(9), fit: BoxFit.cover,))
+        (index) => FadeInImage.assetNetwork(
+          width: responsive.wp(27),
+          height: responsive.hp(9),
+          placeholder: 'assets/images/loading_img.gif',
+          image: images[index],
+          fit: BoxFit.cover,
+        ),
+      )
     );
   }
 }

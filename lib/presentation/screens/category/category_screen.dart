@@ -232,7 +232,7 @@ class _CardCloseup extends StatelessWidget {
               },
             ),
           ),
-          const Spacer(flex: 5),
+          const Spacer(),
           Text(title, style: texts.titleLarge!.copyWith(color: Colors.white), maxLines: 2, overflow: TextOverflow.ellipsis,),
           SizedBox(height: responsive.hp(0.5)),
           if (hasRating)
@@ -241,11 +241,12 @@ class _CardCloseup extends StatelessWidget {
               rating: score
             )
           else
-            Expanded(
+            SizedBox(
+              height: responsive.hp(2.5),
               child: ListView(
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,
-                children: List.generate(items!.length, (index) => CustomLabel(text: items![index])),
+                children: List.generate(items!.length, (index) => Center(child: CustomLabel(text: items![index]))),
               ),
             ),
         ],

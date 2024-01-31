@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -28,6 +29,17 @@ class ProfileProvider extends ChangeNotifier {
   late bool _emailNotification = user!.emailNotification;
   bool _isValidNumber = false;
   List<dynamic> favorites = [];
+
+  Future<void> loadImage() async {
+    final Completer<ImageInfo> completer = Completer();
+
+    if (user?.photo != null) {
+      final ImageStream stream = NetworkImage(user!.photo!).resolve(const ImageConfiguration());
+      stream.addListener(ImageStreamListener((info, synchronousCall) {
+        completer.complete(info);
+      }));
+    }
+  }
 
   void addExpanded(int value) {
     expanded.add(value);

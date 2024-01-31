@@ -164,8 +164,21 @@ class _NavigationTextButtons extends StatelessWidget {
   }
 }
 
-class _LoginForm extends StatelessWidget {
+class _LoginForm extends StatefulWidget {
   const _LoginForm();
+
+  @override
+  State<_LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<_LoginForm> {
+  late final GlobalKey<FormState> loginFormKey;
+
+  @override
+  void initState() {
+    super.initState();
+    loginFormKey = GlobalKey<FormState>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +187,7 @@ class _LoginForm extends StatelessWidget {
     final loginProvider = context.watch<LoginProvider>();
     
     return Form(
-      key: loginProvider.loginFormKey,
+      key: loginFormKey,
       child: Column(
         children: [
           CustomTextFormField(
@@ -231,7 +244,7 @@ class _LoginForm extends StatelessWidget {
             onPressed: loginProvider.isLoading ? null : () async {
               FocusScope.of(context).requestFocus(FocusNode());
 
-              if (loginProvider.isValidForm()) {
+              if (loginFormKey.currentState!.validate()) {
                 loginProvider.isLoading = true;
 
                 final errorMessage = await firebaseAuthService.login(loginProvider.email.trim(), loginProvider.password.trim());
@@ -255,7 +268,7 @@ class _LoginForm extends StatelessWidget {
                     break;
                   default:
                     context.read<ProfileProvider>().user = await firebaseAuthService.getUser();
-                    Future.microtask(() async => await context.read<CategoryProvider>().loadData());
+                    Future.microtask(() => context.read<CategoryProvider>().loadData());
                     Future.microtask(() => context.pushReplacementNamed(NavegationScreen.name));
                     loginProvider.isLoading = false;
                     loginProvider.errorEmail = null;

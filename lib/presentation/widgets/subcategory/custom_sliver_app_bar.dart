@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/presentation/providers/providers.dart';
+import 'package:viva_city/presentation/screens/screens.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
 
@@ -34,9 +36,7 @@ class CustomSliverAppBar extends StatelessWidget {
         ),
         IconButton(
           icon: const Icon(Icons.map_outlined),
-          onPressed: () {
-            // TODO: Redirijir al mapa en la ubicación del objeto
-          }
+          onPressed: () => context.pushNamed(MapScreen.name, extra: null),
         ),
       ],
     );

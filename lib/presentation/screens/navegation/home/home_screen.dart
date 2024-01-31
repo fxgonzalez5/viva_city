@@ -59,13 +59,13 @@ class _CustomCarouselSlider extends StatelessWidget {
       children: [
         CarouselSlider(
           items: List.generate(images.length,
-      (index) => FadeInImage(
-        fit: BoxFit.cover,
-        width: double.infinity, 
-        placeholder: const AssetImage('assets/images/loading.gif'),
-        image: NetworkImage(images[index]),
-      )
-    ),
+            (index) => FadeInImage(
+              fit: BoxFit.cover,
+              width: double.infinity, 
+              placeholder: const AssetImage('assets/images/loading.gif'),
+              image: NetworkImage(images[index]),
+            )
+          ),
           options: CarouselOptions(
             height: responsive.hp(35),
             viewportFraction: 1,

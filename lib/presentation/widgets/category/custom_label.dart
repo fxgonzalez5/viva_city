@@ -18,7 +18,7 @@ class CustomLabel extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.only(right: responsive.wp(2)),
-      padding: EdgeInsets.symmetric(horizontal: responsive.hp(0.5)),
+      padding: EdgeInsets.symmetric(vertical: responsive.hp(0.2), horizontal: responsive.wp(1)),
       decoration: BoxDecoration(
         border:  Border.all(color: colors.secondary),
         borderRadius: BorderRadius.circular(responsive.ip(0.5))

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/domain/entities/entities.dart';
+import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class EventScreen extends StatelessWidget {
@@ -16,6 +19,8 @@ class EventScreen extends StatelessWidget {
     final texts = Theme.of(context).textTheme;
     final responsive = Responsive(context);
     final colors = Theme.of(context).colorScheme;
+    final mapProvider = context.read<MapProvider>();
+    mapProvider.addMarker(event.titulo, event.ubicacion , LatLng(event.latitud, event.longitud), 'assets/icons/event.png');
     
     return Scaffold(
       body: CustomScrollView(
@@ -121,11 +126,13 @@ class _CustomCarouselSlider extends StatelessWidget {
       sliver: SliverToBoxAdapter(
         child: CarouselSlider(
             items: List.generate(images.length, (index) {
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: responsive.wp(1.5)),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(responsive.ip(1)),
-                  child: Image.network(images[index], fit: BoxFit.cover, width: double.infinity,),
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(responsive.ip(1)),
+                child: FadeInImage.assetNetwork(
+                  width: double.infinity,
+                  placeholder: 'assets/images/loading_img.gif',
+                  image: images[index],
+                  fit: BoxFit.cover,
                 ),
               );
             }),

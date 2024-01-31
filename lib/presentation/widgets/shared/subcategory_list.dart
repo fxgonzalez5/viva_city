@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:viva_city/config/theme/responsive.dart';
-import 'package:viva_city/presentation/providers/category_provider.dart';
-import 'package:viva_city/presentation/providers/profile_provider.dart';
+import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class SubcategoryList extends StatelessWidget {
@@ -28,6 +27,7 @@ class SubcategoryList extends StatelessWidget {
         object: items[index],
         isFavorites: isFavorites,
         onTap: () {
+          context.read<MapProvider>().markers.clear();
           context.read<CategoryProvider>().currentObject = items[index];
           context.push(route!, extra: items[index]);
         }
@@ -65,25 +65,33 @@ class _SubcategoryItem extends StatelessWidget {
         onTap: onTap,
         child: Row(
           children: [
-            Container(
+            SizedBox(
               width: responsive.wp(33),
               height: responsive.hp(13),
-              alignment: Alignment.topRight,
-              decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(object.portada), fit: BoxFit.cover)
-              ),
-              child: FavoriteButton(
-                icon: (object.isFavorite) ? Icons.favorite : Icons.favorite_border,
-                iconColor: (object.isFavorite) ? Colors.red : Colors.grey.shade400,
-                onPressed: () {
-                  if (object.isFavorite) {
-                    context.read<ProfileProvider>().removeFavorites(object);
-                  } else {
-                    context.read<ProfileProvider>().addFavorites(object);
-                  }
-                  object.isFavorite = !object.isFavorite;
-                  if (!isFavorites) context.read<CategoryProvider>().updateItemByCategory(2, object);
-                },
+              child: Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  FadeInImage.assetNetwork(
+                    width: double.infinity,
+                    height: double.infinity,
+                    placeholder: 'assets/images/loading_img.gif',
+                    image: object.portada,
+                    fit: BoxFit.cover,
+                  ),
+                  FavoriteButton(
+                    icon: (object.isFavorite) ? Icons.favorite : Icons.favorite_border,
+                    iconColor: (object.isFavorite) ? Colors.red : Colors.grey.shade400,
+                    onPressed: () {
+                      if (object.isFavorite) {
+                        context.read<ProfileProvider>().removeFavorites(object);
+                      } else {
+                        context.read<ProfileProvider>().addFavorites(object);
+                      }
+                      object.isFavorite = !object.isFavorite;
+                      if (!isFavorites) context.read<CategoryProvider>().updateItemByCategory(2, object);
+                    },
+                  ),
+                ],
               ),
             ),
             SizedBox(width: responsive.wp(5)),
@@ -100,15 +108,17 @@ class _SubcategoryItem extends StatelessWidget {
                     )
                   else
                     SizedBox(
-                      height: responsive.hp(2),
+                      height: responsive.hp(2.5),
                       child: ListView(
                         physics: const NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         children: List.generate(
                           object.getAttribute().length,
-                          (index) => CustomLabel(
-                            text: object.getAttribute()[index],
-                            style: texts.bodySmall!.copyWith(color: colors.secondary),
+                          (index) => Center(
+                            child: CustomLabel(
+                              text: object.getAttribute()[index],
+                              style: texts.bodySmall!.copyWith(color: colors.secondary),
+                            ),
                           ),
                         ),
                       ),

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:viva_city/config/theme/responsive.dart';
 import 'package:viva_city/domain/entities/place.dart';
+import 'package:viva_city/presentation/providers/providers.dart';
 import 'package:viva_city/presentation/widgets/widgets.dart';
 
 class PlaceScreen extends StatelessWidget {
@@ -14,6 +17,8 @@ class PlaceScreen extends StatelessWidget {
     final texts = Theme.of(context).textTheme;
     final responsive = Responsive(context);
     final colors = Theme.of(context).colorScheme;
+    final mapProvider = context.read<MapProvider>();
+    mapProvider.addMarker(place.titulo, place.ubicacion , LatLng(place.latitud, place.longitud), 'assets/icons/place.png');
 
     return Scaffold(
       body: CustomScrollView(

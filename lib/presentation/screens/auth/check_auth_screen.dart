@@ -27,12 +27,14 @@ class CheckAuthScreen extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
           
           if (snapshot.connectionState == ConnectionState.active){
+            context.read<CategoryProvider>().loadData();
+            
             if (snapshot.hasData) {
               return FutureBuilder(
                 future: firebaseAuthService.getUser(),
                 builder: (context, snapshot) {
-                  context.read<CategoryProvider>().loadData();
                   userProvider.user = snapshot.data;
+                  userProvider.loadImage();
                   return const NavegationScreen();
                 },
               );
