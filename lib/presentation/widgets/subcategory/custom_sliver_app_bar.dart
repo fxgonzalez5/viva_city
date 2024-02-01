@@ -36,7 +36,7 @@ class CustomSliverAppBar extends StatelessWidget {
         ),
         IconButton(
           icon: const Icon(Icons.map_outlined),
-          onPressed: () => context.pushNamed(MapScreen.name, extra: null),
+          onPressed: () => context.pushNamed(LoadingScreen.name, extra: null),
         ),
       ],
     );
